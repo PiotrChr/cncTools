@@ -20,7 +20,7 @@ def gen_frames(camera_id):
                 b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
 
 
-@app.route('/video_feed/<string:id>/', methods=["GET"])
+@app.route('/video_feed/<string:camera_id>/', methods=["GET"])
 def video_feed(camera_id):
    
     """Video streaming route. Put this in the src attribute of an img tag."""
