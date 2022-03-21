@@ -3,7 +3,6 @@ import cv2
 
 app = Flask(__name__)
 
-
 def gen_frames(camera_id):
     cap = cv2.VideoCapture(camera_id)
     
@@ -20,7 +19,7 @@ def gen_frames(camera_id):
                 b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
 
 
-@app.route('/video_feed/<string:camera_id>/', methods=["GET"])
+@app.route('/video_feed/<int:camera_id>/', methods=["GET"])
 def video_feed(camera_id):
    
     """Video streaming route. Put this in the src attribute of an img tag."""
@@ -34,4 +33,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0")
