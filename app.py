@@ -1,7 +1,9 @@
-from flask import Flask, render_template, Response
+from flask import Flask, Blueprint, render_template, Response, jsonify, request
 import cv2
 
-app = Flask(__name__)
+sec = Blueprint('sec', __name__)
+main = Blueprint('main', __name__)
+
 
 def gen_frames(camera_id):
     cap = cv2.VideoCapture(camera_id)
@@ -19,7 +21,7 @@ def gen_frames(camera_id):
                 b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
 
 
-@app.route('/video_feed/<int:camera_id>/', methods=["GET"])
+@sec.route('/video_feed/<int:camera_id>/', methods=["GET"])
 def video_feed(camera_id):
    
     """Video streaming route. Put this in the src attribute of an img tag."""
@@ -27,10 +29,21 @@ def video_feed(camera_id):
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-@app.route('/', methods=["GET"])
+@sec.route('/', methods=["GET"])
 def index():
     return render_template('index.html')
 
 
+@main.errorhandler(404)
+def page_not_found(e):
+    return jsonify(error=str(e), url=request.url), 404
+
+
+app = Flask(__name__)
+app.register_blueprint(sec, url_prefix="/sec")
+app.register_blueprint(main)
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)
+
+
