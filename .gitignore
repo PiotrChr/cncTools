@@ -132,3 +132,4 @@ dmypy.json
 .idea
 
 tmp/*
+.uwsgi_plugins_builder
