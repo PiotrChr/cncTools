@@ -1,0 +1,30 @@
+(touch_plate.ngc)
+
+O <touch_plate> sub 
+g91 (switch to relative coordinates)
+G38.2 Z-70 F150 (down fast to get approximate)
+F100 G1 Z2 (up .08)
+G38.2 Z-3 F20 (down slow to get exact)
+F100 G1 Z.5 (up .1)
+
+(vesion 1 set but at 0 and manually hit zero button)
+T0 M6 (pause)
+F100 G1 Z-20.5 (down to true zero - .1 up + 2cm thickness of plate)
+g90 (switch to absolute coordinates)
+
+
+(Version 2)
+(g90)
+(G38.2 Z-1 F1)
+(G10 L20 P0 Z0.1230)
+(G0 Z.5)
+
+
+(Version 3)
+(g90)
+(G38.2 Z-1 F1)
+(G0 Z.5)
+
+(G92 Z0.1230)
+O <touch_plate> endsub
+M2
