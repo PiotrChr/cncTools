@@ -21,5 +21,8 @@ start_stream:
 sync_cnc:
 	rsync -av --exclude={'venv','.idea','__pycache__'} ./ ${CNCUSER}@${CNCIP}:${CNCFOLDER}
 
-start_uwsgi:
-	uwsgi resources/uwsgi/uwsgi.ini
+start_uwsgi_cam:
+	uwsgi resources/uwsgi/uwsgi_cam.ini --enable-threads
+
+start_uwsgi_sec:
+	uwsgi resources/uwsgi/uwsgi_sec.ini
