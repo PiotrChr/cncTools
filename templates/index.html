@@ -11,31 +11,56 @@
 
     <style>
         .label {
-            position: absolute;
-            z-index: 2;
-            top: 15px;
-            left: 30px;
-            display: block;
-            margin: 0;
-            font-size:16px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
     </style>
-    <title>Multiple Live Streaming</title>
+    <title>Overseer eye</title>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     <div class="row">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
+            <div class="card">
+                <img class="card-img-top" src="http://192.168.2.44/webcam/?action=stream" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">3D printer</h5>
+                </div>
+            </div>
 
-        <div class="col-lg-6">
-            <h3 class="label">6040 CNC</h3>
-            <img src=":8081/cam/video_feed/0" width="100%">
         </div>
-        <div class="col-lg-6">
-            <h3 class="label">3D printer</h3>
-            <img src="http://192.168.2.44/webcam/?action=stream" width="100%">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
+            <div class="card">
+                <img class="card-img-top" src="http://192.168.2.44:8082/?action=stream" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">3D printer 2</h5>
+                </div>
+            </div>
         </div>
-
-
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
+            <div class="card">
+                <img class="card-img-top" src="http://192.168.2.53:8081/cam/video_feed/2" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">6040 CNC</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
+            <div class="card">
+                <img class="card-img-top" src="http://192.168.2.53:8081/cam/video_feed/0" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Workshop 1</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
+            <div class="card">
+                <img class="card-img-top" src="http://192.168.2.53:8081/cam/video_feed/4" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Workshop 2</h5>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

@@ -8,8 +8,6 @@ from src.cam.CamLoader import CamLoader
 outputFrame = None
 lock = threading.Lock()
 
-frameRate = 30
-
 loaders = []
 
 cam = Blueprint('cam', __name__)
@@ -26,11 +24,13 @@ def get_loader(camera_id):
 
 def generate_frames(camera_id):
     _loader = get_loader(camera_id)
+    print("Camera: " + str(camera_id) + " is generating frames")
     if _loader is None:
-        raise Exception("No loader with id: " + camera_id + " found")
+        raise Exception("No loader with id: " + str(camera_id) + " found")
 
     while True:
         if _loader.outputFrame is None:
+            print("No output for camera: " + str(camera_id))
             time.sleep(1)
             continue
 
@@ -58,10 +58,7 @@ app.register_blueprint(main)
 if __name__ in ['__main__', 'uwsgi_file_camLoader']:
     ap = argparse.ArgumentParser()
     ap.add_argument('-c', '--cameras', nargs='+', type=int, required=True)
-    print("args")
-    print(ap.parse_args()._get_kwargs())
     for _, value in ap.parse_args()._get_kwargs():
-        print(value)
         if _ == "cameras":
             for cam in value:
                 loader = CamLoader(cam)
