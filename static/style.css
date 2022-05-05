@@ -1,0 +1,26 @@
+.cnc_card-title {
+    float: left;
+    margin-top: 8px;
+}
+.cnc_card-button {
+    float: right;
+}
+.cam_card {
+    height: 100%
+}
+.label {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.cnc_card-relay_status {
+    display: block;
+    margin-top: 8px;
+    margin-right: 20px;
+    float:right
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}

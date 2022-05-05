@@ -132,3 +132,6 @@ dmypy.json
 
 tmp/*
 .uwsgi_plugins_builder
+
+/node_modules
+/build

@@ -1,82 +1,19 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends "layout.html" %}
+{% block containerClass %}containerFluid{% endblock %}
+{% block title %}Overseer eye{% endblock %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-    <style>
-        .cnc_card-title {
-            float: left;
-            margin-top: 8px;
-        }
-        .cnc_card-button {
-            float: right;
-        }
-        .cam_card {
-            height: 100%
-        }
-        .label {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
-    <title>Overseer eye</title>
-</head>
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
-            <div class="card cam_card">
-                <img class="card-img-top" src="http://192.168.2.44/webcam/?action=stream" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title cnc_card-title">3D printer</h5>
-                    <a href="#" class="btn btn-primary cnc_card-button">Inspect</a>
-                </div>
-            </div>
-
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
-            <div class="card cam_card">
-                <img class="card-img-top" src="http://192.168.2.44:8082/?action=stream" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title cnc_card-title">3D printer 2</h5>
-                    <a href="#" class="btn btn-primary cnc_card-button">Inspect</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
-            <div class="card cam_card">
-                <img class="card-img-top" src="http://192.168.2.53:8081/cam/video_feed/4" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title cnc_card-title">6040 CNC</h5>
-                    <a href="#" class="btn btn-primary cnc_card-button">Inspect</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
-            <div class="card cam_card">
-                <img class="card-img-top" src="http://192.168.2.53:8081/cam/video_feed/0" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title cnc_card-title">Workshop 1</h5>
-                    <a href="#" class="btn btn-primary cnc_card-button">Inspect</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
-            <div class="card cam_card">
-                <img class="card-img-top" src="http://192.168.2.53:8081/cam/video_feed/2" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title cnc_card-title">Workshop 2</h5>
-                    <a href="#" class="btn btn-primary cnc_card-button">Inspect</a>
-                </div>
+{% block content %}
+<div class="row">
+    {% for camera in cameras %}
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
+        <div class="card cam_card">
+            <img class="card-img-top" src="{{ cameras[camera].source }}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title cnc_card-title">{{ cameras[camera].name }}</h5>
+                <a href="{{ url_for('sec.single', r=camera) }}" class="btn btn-primary cnc_card-button">Inspect</a>
             </div>
         </div>
     </div>
+    {% endfor %}
 </div>
-</body>
-</html>
+{% endblock %}

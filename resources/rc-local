@@ -1,0 +1,2 @@
+# su - pi -c " cd /home/pi/piIpCam/ && make start_uwsgi_cam"
+# su - pi -c " cd /home/pi/piIpCam/ && make start_uwsgi_sec"
