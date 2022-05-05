@@ -3,10 +3,11 @@
 {% block title %}Camera view{% endblock %}
 
 {% block content %}
+{% set rotate = camera.rotate if camera.rotate else 0 -%}
 <div class="row">
     <div class="col-12">
         <div class="card cam_card">
-            <img class="card-img-top" src="{{ camera.source }}" alt="Card image cap">
+            <img style="transform:rotate({{ rotate }}deg)" class="card-img-top" src="{{ camera.source }}" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title cnc_card-title">{{ camera.name }}</h5>
                 <div style="clear:both">

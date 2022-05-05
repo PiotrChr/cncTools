@@ -12,6 +12,7 @@ class CamRecorder(threading.Thread):
         self.source = source
         self.timer = timer
         self.t = None
+        self._camera = config["cameras"][camera]
         self.vcap = None
         self.stop = None
         self._out = None
@@ -47,7 +48,6 @@ class CamRecorder(threading.Thread):
     def prepare(self):
         camera_path = config['recordings_dir'] + "/" + str(self.camera)
         self.started_at = datetime.now()
-
         if not os.path.exists(camera_path):
             os.makedirs(camera_path)
 
@@ -102,6 +102,15 @@ class CamRecorder(threading.Thread):
             )
 
         resized = cv2.resize(item, (self.width, self.height), interpolation=cv2.INTER_AREA)
+
+        rot_val = self._camera["rotate"]
+        if rot_val == 90:
+            resized = cv2.rotate(resized, cv2.cv2.ROTATE_90_CLOCKWISE)
+        if rot_val == -90:
+            resized = cv2.rotate(resized, cv2.cv2.ROTATE_90_COUNTERCLOCKWISE)
+        if rot_val == 180:
+            resized = cv2.rotate(resized, cv2.cv2.ROTATE_180)
+
         # if self._swap_channels:
         #     resized = resized[...,::-1]
         self._out.write(resized)

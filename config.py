@@ -51,6 +51,7 @@ config = {
             "id": 7,
             "name": "Pigeon Cam",
             "source": "http://192.168.2.60:8081/cam/video_feed/0",
+            "rotate": 180
         }
     },
     "relays": {
