@@ -5,7 +5,6 @@ import json
 import time
 from src.cam.CamRecorder import CamRecorder
 from src.delivery.http.utils import map_recorder
-
 from os import listdir, remove
 from os.path import isfile, join, exists
 
@@ -45,6 +44,7 @@ def get_recordings_for_cam(camera: int):
                 for f in listdir(rec_path) if isfile(join(rec_path, f))]
 
     return None
+
 
 def get_full_status_for_cam(camera: int):
     rec_status = get_rec_status_for_cam(camera)

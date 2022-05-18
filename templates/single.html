@@ -2,6 +2,10 @@
 {% set containerClass = "container" %}
 {% block title %}Camera view{% endblock %}
 
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dist/single.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 {% set rotate = camera.rotate if camera.rotate else 0 -%}
 <div class="row">
@@ -10,12 +14,26 @@
             <img style="transform:rotate({{ rotate }}deg)" class="card-img-top" src="{{ camera.source }}" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title cnc_card-title">{{ camera.name }}</h5>
-                <div style="clear:both">
-                    <a href="/sec" class="btn btn-primary cnc_card-button float-right">Back</a>
+                <div class="d-flex align-items-center justify-content-between mt-5" style="clear:both">
+                    <a href="/sec" class="btn btn-primary cnc_card-button">Back</a>
+                    {% if camera.move %}
+                        <div class="camera_control d-flex align-items-center">
+                            <div>
+                                <a id="camera_control_left" href="{{ camera.move.motors.h }}/-1" class="btn d-block"><i class="fa fa-arrow-left"></i></a>
+                            </div>
+                            <div>
+                                <a id="camera_control_up" href="{{ camera.move.motors.v }}/1" class="btn clearfix d-block mb-4"><i class="fa fa-arrow-up"></i></a>
+                                <a id="camera_control_down" href="{{ camera.move.motors.v }}/-1" class="btn d-block mt-4"><i class="fa fa-arrow-down"></i></a>
+                            </div>
+                            <div>
+                                <a id="camera_control_right" href="{{ camera.move.motors.h }}/1" class="btn d-block"><i class="fa fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    {% endif %}
                     {% if rec_status %}
-                        <a href="{{ url_for('sec.sec_stop_record', camera=camera.id) }}" class="btn btn-danger cnc_card-button mr-5">Stop Recording</a>
+                        <a href="{{ url_for('sec.sec_stop_record', camera=camera.id) }}" class="btn btn-danger cnc_card-button">Stop Recording</a>
                     {% else %}
-                        <a href="{{ url_for('sec.sec_start_record', camera=camera.id) }}" class="btn btn-success cnc_card-button mr-5">Start Recording</a>
+                        <a href="{{ url_for('sec.sec_start_record', camera=camera.id) }}" class="btn btn-success cnc_card-button">Start Recording</a>
                     {% endif %}
                 </div>
             </div>

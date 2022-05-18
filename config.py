@@ -19,8 +19,14 @@ config = {
         },
         1: {
             "id": 1,
-            "name": "PiClock",
+            "name": "Sting",
             "source": "http://192.168.2.55:8081/cam/video_feed/0",
+            "move": {
+                "motors": {
+                    "v": "http://192.168.2.55:8082/api/move/0",
+                    "h": "http://192.168.2.55:8082/api/move/1"
+                }
+            }
         },
         2: {
             "id": 2,
@@ -41,6 +47,7 @@ config = {
             "id": 5,
             "name": "3D printer 1",
             "source": "http://192.168.2.44/webcam/?action=stream",
+            "rotate": 180
         },
         6: {
             "id": 6,
