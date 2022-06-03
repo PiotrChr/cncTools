@@ -5,7 +5,6 @@ import json
 import time
 from src.cam.CamRecorder import CamRecorder
 from src.delivery.http.utils import map_recorder
-
 from os import listdir, remove
 from os.path import isfile, join, exists
 
@@ -45,6 +44,7 @@ def get_recordings_for_cam(camera: int):
                 for f in listdir(rec_path) if isfile(join(rec_path, f))]
 
     return None
+
 
 def get_full_status_for_cam(camera: int):
     rec_status = get_rec_status_for_cam(camera)
@@ -190,6 +190,45 @@ def relays():
     data = json.loads(status_request.data.decode('utf-8'))
 
     return render_template('relays.html', relays=config['relays']['circuits'], status=data['status'])
+
+
+@sec.route('/window_openers/<string:window_opener_name>/open')
+def open_window(window_opener_name: str):
+    opener = config['window_openers'][window_opener_name]
+    req = http.request('GET', opener['source'] + '/full_open')
+    return redirect(url_for('sec.window_openers'))
+
+
+@sec.route('/window_openers/<string:window_opener_name>/close')
+def close_window(window_opener_name: str):
+    opener = config['window_openers'][window_opener_name]
+    req = http.request('GET', opener['source'] + '/full_close')
+    return redirect(url_for('sec.window_openers'))
+
+
+# @sec.route('/window_openers/<str:window_opener_name>/step_up')
+# def window_step_up(window_opener_name: str):
+#     opener = config['window_openers'][window_name]
+#     req = http.request('GET', opener['source'] + '/full_close')
+#     return redirect(url_for('sec.window_openers'))
+#
+#
+# @sec.route('/window_openers/<str:window_opener_name>/step_down')
+# def window_step_down(window_opener_name: str):
+#     pass
+
+
+@sec.route('/window_openers/<string:window_opener_name>/open_to/<int:open_value>')
+def window_open_to(window_opener_name: str, open_value: int):
+    opener = config['window_openers'][window_opener_name]
+    url = opener['source'] + '/open?p=' + open_value
+    req = http.request('GET', url)
+    return redirect(url_for('sec.window_openers'))
+
+
+@sec.route('/window_openers')
+def window_openers():
+    return render_template('window_openers.html', window_openers=config['window_openers'])
 
 
 @sec.route('/single', methods=["GET"])

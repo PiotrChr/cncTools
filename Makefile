@@ -1,6 +1,7 @@
 CNCIP := 192.168.2.53
 CNCUSER := pchrusciel
 CNCFOLDER := /home/pchrusciel/cncTools
+DLIB_VERSION := 19.24
 
 start_vnc:
 	x11vnc -display :0
@@ -18,6 +19,27 @@ prepare_node:
 	&& nvm install 16 \
 	&& nvm use 16 \
 	&& npm install -g yarn
+
+prepare_dlib:
+	sudo apt-get install -y \
+	cmake pkg-config libx11-dev libatlas-base-dev libgtk-3-dev libboost-python-dev \
+	&& rm -rf tmp \
+	&& mkdir tmp \
+	&& cd tmp \
+	&& wget http://dlib.net/files/dlib-${DLIB_VERSION}.tar.bz2 \
+	&& tar xvf dlib-${DLIB_VERSION}.tar.bz2 \
+	&& cd dlib-${DLIB_VERSION} \
+	&& mkdir build && cd build \
+	&& cmake .. && cmake --build . --config Release \
+	&& sudo make install \
+	&& sudo ldconfig \
+	&& cd .. \
+	&& pkg-config --libs --cflags dlib-1
+
+
+prepare_dlib_python:
+	cd tmp/dlib-${DLIB_VERSION} \
+	&& python3 setup.py install
 
 prepare_resources:
 	sudo cp resources/nginx/cam.conf /etc/nginx/sites-available \
