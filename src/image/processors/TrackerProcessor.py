@@ -14,6 +14,7 @@ class TrackerProcessor(Processor):
         self.tracker = ObjectTracker(replace=False, daemon=daemon)
 
     def process(self, frame):
+        print('tracker processor')
         if not self.should_process():
             return None
 

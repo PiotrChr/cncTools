@@ -43,7 +43,8 @@ def handle_tracked_object(yield_val):
 
 
 if __name__ == '__main__':
-    loader = CamLoader(sting_cam_url)
-    loader.add_processor(TrackerProcessor(0, True))
+    loader = CamLoader(sting_cam_url, by_url=True)
+    loader.add_processor(TrackerProcessor(0, False))
     loader.add_action(TrackerProcessor.__name__, handle_tracked_object)
+    loader.start()
 
