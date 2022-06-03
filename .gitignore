@@ -136,3 +136,4 @@ tmp/*
 /node_modules
 /build
 static/js/dist
+resources/object_tracker

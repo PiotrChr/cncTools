@@ -192,6 +192,45 @@ def relays():
     return render_template('relays.html', relays=config['relays']['circuits'], status=data['status'])
 
 
+@sec.route('/window_openers/<string:window_opener_name>/open')
+def open_window(window_opener_name: str):
+    opener = config['window_openers'][window_opener_name]
+    req = http.request('GET', opener['source'] + '/full_open')
+    return redirect(url_for('sec.window_openers'))
+
+
+@sec.route('/window_openers/<string:window_opener_name>/close')
+def close_window(window_opener_name: str):
+    opener = config['window_openers'][window_opener_name]
+    req = http.request('GET', opener['source'] + '/full_close')
+    return redirect(url_for('sec.window_openers'))
+
+
+# @sec.route('/window_openers/<str:window_opener_name>/step_up')
+# def window_step_up(window_opener_name: str):
+#     opener = config['window_openers'][window_name]
+#     req = http.request('GET', opener['source'] + '/full_close')
+#     return redirect(url_for('sec.window_openers'))
+#
+#
+# @sec.route('/window_openers/<str:window_opener_name>/step_down')
+# def window_step_down(window_opener_name: str):
+#     pass
+
+
+@sec.route('/window_openers/<string:window_opener_name>/open_to/<int:open_value>')
+def window_open_to(window_opener_name: str, open_value: int):
+    opener = config['window_openers'][window_opener_name]
+    url = opener['source'] + '/open?p=' + open_value
+    req = http.request('GET', url)
+    return redirect(url_for('sec.window_openers'))
+
+
+@sec.route('/window_openers')
+def window_openers():
+    return render_template('window_openers.html', window_openers=config['window_openers'])
+
+
 @sec.route('/single', methods=["GET"])
 def single():
     camera = request.args.get('r', default="0", type=int)

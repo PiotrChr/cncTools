@@ -46,13 +46,13 @@ config = {
         5: {
             "id": 5,
             "name": "3D printer 1",
-            "source": "http://192.168.2.44/webcam/?action=stream",
+            "source": "http://192.168.2.43/webcam/?action=stream",
             "rotate": 180
         },
         6: {
             "id": 6,
             "name": "3D printer 2",
-            "source": "http://192.168.2.44:8082/?action=stream",
+            "source": "http://192.168.2.43:8081/1action=stream",
         },
         7: {
             "id": 7,
@@ -86,6 +86,13 @@ config = {
                 "id": 3,
                 "status": 0
             }
+        }
+    },
+    "window_openers": {
+        "living_room_1": {
+            "id": 1,
+            "source": "192.168.2.61",
+            "name": "Living room 1"
         }
     }
 }

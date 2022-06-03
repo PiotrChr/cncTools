@@ -11,10 +11,19 @@ class CamLoader(threading.Thread):
         self.vs = None
         self.t = None
         self.outputFrame = None
+        self.processors = []
+        self.actions = {}
+        self.redetect_radius = None
 
         print("Created cam loader with id:" + str(camera_id))
 
         super().__init__()
+
+    def add_processor(self, processor):
+        self.processors.append(processor)
+
+    def add_action(self, processor, action):
+        self.actions[processor] = action
 
     def start(self):
         self.t = threading.Thread(
@@ -37,9 +46,19 @@ class CamLoader(threading.Thread):
         if frame is None:
             return
         else:
+            for processor in self.processors:
+                process = processor.process(frame)
+                if process is None:
+                    continue
+
+                frame = process
+                processor_name = processor.__class__.__name__
+                if self.actions[processor_name]:
+                    self.actions[processor_name](processor.yield_val)
+
             ret, buffer = cv2.imencode('.jpg', frame)
             self.outputFrame = buffer.tobytes()
 
-        t = threading.Timer(0.3, self.read)
+        t = threading.Timer(0.05, self.read)
         t.daemon = True
         t.start()
