@@ -20,13 +20,15 @@ config = {
         1: {
             "id": 1,
             "name": "Sting",
-            "source": "http://192.168.2.55:8081/cam/video_feed/0",
+            "kafka": True,
+            "source": "http://192.168.2.53:8081/cam/video_feed/StingFrames/",
             "move": {
                 "motors": {
                     "v": "http://192.168.2.55:8082/api/move/0",
                     "h": "http://192.168.2.55:8082/api/move/1"
                 }
-            }
+            },
+            "rotate": 180
         },
         2: {
             "id": 2,
@@ -59,7 +61,13 @@ config = {
             "name": "Pigeon Cam",
             "source": "http://192.168.2.60:8081/cam/video_feed/0",
             "rotate": 180
-        }
+        },
+        8: {
+            "id": 1,
+            "name": "Sting Object Detections",
+            "kafka": True,
+            "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections/"
+        },
     },
     "relays": {
         "status_url": "192.168.2.56/status",
@@ -93,6 +101,37 @@ config = {
             "id": 1,
             "source": "192.168.2.61",
             "name": "Living room 1"
+        }
+    },
+    "kafka": {
+        "servers": "192.168.2.53:29092",
+        "face_detector_conf": {
+            "bootstrap.servers": "192.168.2.53:29092",
+            "group.id": "piotr-object-detector",
+            "enable.auto.commit": "False",
+            "auto.offset.reset": "largest"
+        },
+        "object_detector_conf": {
+            "bootstrap.servers": "192.168.2.53:29092",
+            "group.id": "piotr-object-detector",
+            "enable.auto.commit": "False",
+            "auto.offset.reset": "largest"
+        },
+        "frame_consumer_conf": {
+            "bootstrap.servers": "192.168.2.53:29092",
+            "group.id": "piotr",
+            "enable.auto.commit": "False",
+            "auto.offset.reset": "largest"
+        },
+        "conf": {
+            "bootstrap.servers": "192.168.2.53:29092",
+            "group.id": "piotr"
+        },
+        "topics": {
+            "StingFrames",
+            "StingObjectDetections",
+            "StingFaceDetections",
+            "StingHumanRecognitions"
         }
     }
 }
