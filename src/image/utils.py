@@ -42,4 +42,6 @@ def convert_and_trim_bb(image, rect):
     # return our bounding box coordinates
     return start_x, start_y, w, h
 
+
 def crop(image, rect):
+    pass

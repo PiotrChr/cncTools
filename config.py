@@ -1,4 +1,5 @@
 import os
+import uuid
 
 base_dirs = {
     "web_root": "/sec",
@@ -66,7 +67,8 @@ config = {
             "id": 1,
             "name": "Sting Object Detections",
             "kafka": True,
-            "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections/"
+            "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections"
+
         },
     },
     "relays": {
@@ -107,25 +109,25 @@ config = {
         "servers": "192.168.2.53:29092",
         "face_detector_conf": {
             "bootstrap.servers": "192.168.2.53:29092",
-            "group.id": "piotr-object-detector",
+            "group.id": uuid.uuid4(),
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"
         },
         "object_detector_conf": {
             "bootstrap.servers": "192.168.2.53:29092",
-            "group.id": "piotr-object-detector",
+            "group.id": uuid.uuid4(),
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"
         },
         "frame_consumer_conf": {
             "bootstrap.servers": "192.168.2.53:29092",
-            "group.id": "piotr",
+            "group.id": uuid.uuid4(),
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"
         },
         "conf": {
             "bootstrap.servers": "192.168.2.53:29092",
-            "group.id": "piotr"
+            "group.id": uuid.uuid4()
         },
         "topics": {
             "StingFrames",

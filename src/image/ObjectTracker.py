@@ -16,7 +16,7 @@ class ObjectTracker:
         self.model = 'resources/object_tracker/model2/mobilenet_iter_73000.caffemodel'
 
         self.net = cv2.dnn.readNetFromCaffe(self.prototxt, self.model)
-        self.confidence = 0.5
+        self.confidence = 0.3
         self.labels_to_find = ['person']
         self.image_dim = None
         self.image_center = None
@@ -55,7 +55,7 @@ class ObjectTracker:
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         if self.tracker is None:
-            blob = cv2.dnn.blobFromImage(frame, 0.007843, (w, h), 127.5)
+            blob = cv2.dnn.blobFromImage(rgb, 0.007843, (w, h), 127.5)
             # pass the blob through the network and obtain the detections
             # and predictions
             self.net.setInput(blob)
@@ -84,12 +84,7 @@ class ObjectTracker:
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                     (startX, startY, endX, endY) = box.astype("int")
 
-                    cropped_start_x = 0 if startX < 0 else startX
-                    cropped_start_y = 0 if endY < 0 else startY
-                    cropped_end_x = w if endX > w else endX
-                    cropped_end_y = h if startY > w else endY
-
-                    self.current_cropped_frame = frame[cropped_start_y: cropped_end_y, cropped_start_x: cropped_end_x]
+                    self.current_cropped_frame = frame[max(0, startY): min(h, endY), max(0, startX): min(w, endX)]
 
                     if self.on_recognition is not None:
                         self.on_recognition(self.current_cropped_frame, self.label, self.recognition_id)
@@ -115,16 +110,13 @@ class ObjectTracker:
             self.tracker.update(rgb)
             pos = self.tracker.get_position()
 
-            start_x = int(pos.left())
-            start_y = int(pos.top())
-            end_x = int(pos.right())
-            end_y = int(pos.bottom())
+            start_x = max(0, int(pos.left()))
+            start_y = max(0, int(pos.top()))
+            end_x = min(w, int(pos.right()))
+            end_y = min(h, int(pos.bottom()))
 
             self.object_center = utils.get_object_center((start_y, end_x, end_y, start_x))
             self.object_offset = utils.get_center_offset(self.object_center, self.image_center)
-
-            if self.on_track is not None:
-                self.on_track(self.object_center, self.object_offset)
 
             if self.replace:
                 cv2.line(frame, self.object_center, self.image_center, (0, 255, 0), 2)
@@ -133,6 +125,12 @@ class ObjectTracker:
                               (0, 255, 0), 1)
                 cv2.putText(frame, self.label, (start_x, start_y - 15),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 1)
+
+            print(start_y, end_y, start_x, end_x)
+            current_cropped_frame = frame[start_y: end_y, start_x: end_x]
+
+            if self.on_track is not None:
+                self.on_track(current_cropped_frame, self.object_center, self.object_offset)
 
             self.handle_tracker_reset()
 

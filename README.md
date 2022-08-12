@@ -19,6 +19,7 @@ Sting
 
 
 /usr/local/opt/kafka/bin/kafka-console-consumer --bootstrap-server 192.168.2.53:9092 --topic Sting --from-beginning
+
 echo "Hello, World" | /usr/local/opt/kafka/bin/kafka-console-producer --broker-list 192.168.2.53:9092 --topic Sting > /dev/null
 
 

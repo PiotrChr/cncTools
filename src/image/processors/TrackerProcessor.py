@@ -11,7 +11,7 @@ class TrackerProcessor(Processor):
         self.daemon = daemon
         self.restart = False
         self.tracker = ObjectTracker(
-            replace=True,
+            replace=False,
             daemon=daemon,
             on_track=self.on_track,
             on_recognition=self.on_recognition
@@ -20,8 +20,10 @@ class TrackerProcessor(Processor):
         self.last_recognition_id = None
         self.HDProducer = StingHumanDetectionProducer()
 
-    def on_track(self, object_center, object_offset):
-        pass
+    def on_track(self, frame, object_center, object_offset):
+        if frame is not None:
+            byte_image = cv2.imencode('.jpg', frame)[1].tostring()
+            self.HDProducer.produce(byte_image)
 
     def on_recognition(self, frame, label, recognition_id):
         if recognition_id != self.last_recognition_id:
