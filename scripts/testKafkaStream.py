@@ -8,7 +8,7 @@ import time
 import uuid
 import timeit
 
-topic = ['StingObjectDetections']
+topic = ['StingFrames']
 
 
 print('subscribing')

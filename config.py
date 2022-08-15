@@ -23,12 +23,7 @@ config = {
             "name": "Sting",
             "kafka": True,
             "source": "http://192.168.2.53:8081/cam/video_feed/StingFrames/",
-            "move": {
-                "motors": {
-                    "v": "http://192.168.2.55:8082/api/move/0",
-                    "h": "http://192.168.2.55:8082/api/move/1"
-                }
-            },
+            "api": "http://192.168.2.55:8082/api/",
             "rotate": 180
         },
         2: {

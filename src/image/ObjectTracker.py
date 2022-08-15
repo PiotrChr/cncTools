@@ -16,7 +16,7 @@ class ObjectTracker:
         self.model = 'resources/object_tracker/model2/mobilenet_iter_73000.caffemodel'
 
         self.net = cv2.dnn.readNetFromCaffe(self.prototxt, self.model)
-        self.confidence = 0.3
+        self.confidence = 0.4
         self.labels_to_find = ['person']
         self.image_dim = None
         self.image_center = None
@@ -73,7 +73,7 @@ class ObjectTracker:
                 # with its class label
                 conf = detections[0, 0, i, 2]
                 self.label = self.CLASSES[int(detections[0, 0, i, 1])]
-                print('label', self.label)
+                # print('label', self.label)
                 if self.label in self.labels_to_find:
                     print('confidence', conf)
 
@@ -126,11 +126,10 @@ class ObjectTracker:
                 cv2.putText(frame, self.label, (start_x, start_y - 15),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 1)
 
-            print(start_y, end_y, start_x, end_x)
             current_cropped_frame = frame[start_y: end_y, start_x: end_x]
 
             if self.on_track is not None:
-                self.on_track(current_cropped_frame, self.object_center, self.object_offset)
+                self.on_track(current_cropped_frame, self.object_center, self.object_offset, self.image_dim)
 
             self.handle_tracker_reset()
 

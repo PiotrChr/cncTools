@@ -1,6 +1,7 @@
 from src.image.processors.Processor import Processor
 from src.image.ObjectTracker import ObjectTracker
 from src.messaging.domains.sting.producer.StingHumanDetectionProducer import StingHumanDetectionProducer
+from src.robot_controller.RobotController import RobotController
 import cv2
 import imutils
 
@@ -8,6 +9,7 @@ import imutils
 class TrackerProcessor(Processor):
     def __init__(self, frame_skip=0, daemon=False):
         super().__init__(self.__class__.__name__, frame_skip)
+        self.robot_controller = RobotController()
         self.daemon = daemon
         self.restart = False
         self.tracker = ObjectTracker(
@@ -20,10 +22,12 @@ class TrackerProcessor(Processor):
         self.last_recognition_id = None
         self.HDProducer = StingHumanDetectionProducer()
 
-    def on_track(self, frame, object_center, object_offset):
-        if frame is not None:
-            byte_image = cv2.imencode('.jpg', frame)[1].tostring()
-            self.HDProducer.produce(byte_image)
+    def on_track(self, frame, object_center, object_offset, image_dim):
+        self.robot_controller.compensate(object_center, object_offset, image_dim)
+
+        # if frame is not None:
+        #     byte_image = cv2.imencode('.jpg', frame)[1].tostring()
+        #     self.HDProducer.produce(byte_image)
 
     def on_recognition(self, frame, label, recognition_id):
         if recognition_id != self.last_recognition_id:

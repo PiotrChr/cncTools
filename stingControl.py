@@ -1,11 +1,8 @@
-from src.cam.CamLoader import CamLoader
 from src.cam.KafkaLoader import KafkaLoader
 from src.image.processors.TrackerProcessor import TrackerProcessor
 from config import config
 import time
-from flask import Flask, Response
 import urllib3
-from src.messaging.domains.sting.consumer.FrameConsumer import FrameConsumer
 
 
 sting_cam_url = config["cameras"][1]["source"]

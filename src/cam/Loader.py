@@ -43,7 +43,8 @@ class Loader:
                 self.outputFrame = self.prepare_output_frame(frame)
                 self.frame = frame
             else:
-                print('no frame')
+                pass
+                # print('no frame')
             time.sleep(self.refresh_rate)
 
         self.cleanup()
