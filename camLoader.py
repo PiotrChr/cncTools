@@ -4,6 +4,8 @@ from flask import Flask, Blueprint, Response, jsonify, request
 import threading
 import argparse
 from src.cam.CamLoader import CamLoader
+from src.cam.KafkaLoader import KafkaLoader
+from config import config
 
 outputFrame = None
 lock = threading.Lock()
@@ -39,9 +41,14 @@ def generate_frames(camera_id):
                 b'Content-Type: image/jpeg\r\n\r\n' + _loader.outputFrame + b'\r\n')
 
 
-@cam.route('/video_feed/<int:camera_id>/', methods=["GET"])
+@cam.route('/video_feed/<string:camera_id>/', methods=["GET"])
 def video_feed(camera_id):
     """Video streaming route. Put this in the src attribute of an img tag."""
+    try:
+        camera_id = int(camera_id)
+    except:
+        pass
+
     return Response(generate_frames(camera_id),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -57,11 +64,16 @@ app.register_blueprint(main)
 
 if __name__ in ['__main__', 'uwsgi_file_camLoader']:
     ap = argparse.ArgumentParser()
-    ap.add_argument('-c', '--cameras', nargs='+', type=int, required=True)
+    ap.add_argument('-c', '--cameras', nargs='+', type=str, required=True)
     for _, value in ap.parse_args()._get_kwargs():
         if _ == "cameras":
             for cam in value:
-                loader = CamLoader(cam)
+                try:
+                    cam = int(cam)
+                    loader = CamLoader(cam)
+                except ValueError:
+                    loader = KafkaLoader([cam], config["kafka"]["frame_consumer_conf"])
+
                 loader.start()
                 loaders.append(loader)
 

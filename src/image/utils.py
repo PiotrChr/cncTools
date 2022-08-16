@@ -21,3 +21,27 @@ def get_frame_center(frame):
     image_center = (int(w/2), int(h/2))
 
     return image_dim, image_center
+
+
+def convert_and_trim_bb(image, rect):
+    # extract the starting and ending (x, y)-coordinates of the
+    # bounding box
+    start_x = rect.left()
+    start_y = rect.top()
+    end_x = rect.right()
+    end_y = rect.bottom()
+    # ensure the bounding box coordinates fall within the spatial
+    # dimensions of the image
+    start_x = max(0, start_x)
+    start_y = max(0, start_y)
+    end_x = min(end_x, image.shape[1])
+    end_y = min(end_y, image.shape[0])
+    # compute the width and height of the bounding box
+    w = end_x - start_x
+    h = end_y - start_y
+    # return our bounding box coordinates
+    return start_x, start_y, w, h
+
+
+def crop(image, rect):
+    pass
