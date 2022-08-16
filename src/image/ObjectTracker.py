@@ -78,6 +78,7 @@ class ObjectTracker:
                     print('confidence', conf)
 
                 if conf > self.confidence and self.label in self.labels_to_find:
+                    print('match')
                     self.recognition_id = random.getrandbits(128)
                     # compute the (x, y)-coordinates of the bounding box
                     # for the object

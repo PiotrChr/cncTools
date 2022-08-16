@@ -23,7 +23,7 @@ class TrackerProcessor(Processor):
         self.HDProducer = StingHumanDetectionProducer()
 
     def on_track(self, frame, object_center, object_offset, image_dim):
-        self.robot_controller.compensate(object_center, object_offset, image_dim)
+        self.robot_controller.compensate(object_offset, image_dim)
 
         # if frame is not None:
         #     byte_image = cv2.imencode('.jpg', frame)[1].tostring()
@@ -43,8 +43,11 @@ class TrackerProcessor(Processor):
 
         if self.restart:
             self.restart = False
-            # self.restart = False
-            # self.tracker.tracker = None
+            self.tracker.tracker = None
+
+        if self.robot_controller.restart:
+            self.robot_controller.restart = False
+            self.tracker.tracker = None
 
         small_frame = imutils.resize(frame, width=300)
         small_frame = cv2.rotate(small_frame, cv2.cv2.ROTATE_180)

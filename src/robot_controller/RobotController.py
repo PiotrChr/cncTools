@@ -11,8 +11,8 @@ class RobotController:
     W_RANGE = range(0, 1)
     H_ANGLE = 50
     V_ANGLE = 20
-    MOTOR_V = 0
-    MOTOR_H = 1
+    MOTOR_V = 1
+    MOTOR_H = 0
 
     def __init__(self):
         self.current_lock = 0
@@ -20,16 +20,16 @@ class RobotController:
         self.safe_w = None
         self.h_step = None
         self.v_step = None
+        self.restart = False
 
-    def compensate(self, object_center, object_offset, image_dim):
-        print("running compensate on track")
+    def compensate(self, object_offset, image_dim):
         # if not self.should_handle():
         #     return
 
         if not self.safe_w:
             w, h = image_dim
-            self.safe_h = h/5
-            self.safe_w = w/3
+            self.safe_h = h/4
+            self.safe_w = w/4
             self.h_step = self.H_ANGLE/w
             self.v_step = self.V_ANGLE/h
 
@@ -38,24 +38,20 @@ class RobotController:
         if abs(x_offset) <= self.safe_w and abs(y_offset) <= self.safe_h:
             return
 
-        pos_v, pos_h = self.readpos()
+        cam_pos_v, cam_pos_h = self.readpos()
 
-        # TODO: Finish this
-        # motor = 0
-        # angle = 0
-        # if abs(x_offset) > self.safe_w:
-        #     self.current_lock = 0
-        #     motor = self.MOTOR_H
-        #     # self.move_camera("h", 1 if x_offset < 0 else -1)
-        #     print('w out')
-        #
+        if abs(x_offset) > self.safe_w:
+            self.current_lock = 0
+            angle = min(max(0, int(cam_pos_h + x_offset * self.h_step * -1)), 180)
+            print('compenstating X, moving to: ', angle)
+            self.restart = True
+            self.move_camera(self.MOTOR_H, angle)
+
         # if abs(y_offset) > self.safe_h:
         #     self.current_lock = 0
-        #     motor = self.MOTOR_H
-        #     # self.move_camera("v", 1 if y_offset < 0 else -1)
-        #     print('h out')
-        #
-        # self.move_camera(motor, angle)
+        #     angle = int(cam_pos_v + y_offset * self.v_step)
+        #     print('compenstating Y, moving to: ', angle)
+        #     self.move_camera(self.MOTOR_V, angle)
 
     def should_handle(self):
         if self.current_lock < self.FRAME_LOCK:
