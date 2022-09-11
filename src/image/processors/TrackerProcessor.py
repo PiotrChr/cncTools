@@ -49,9 +49,8 @@ class TrackerProcessor(Processor):
             self.robot_controller.restart = False
             self.tracker.tracker = None
 
-        small_frame = imutils.resize(frame, width=300)
-        small_frame = cv2.rotate(small_frame, cv2.cv2.ROTATE_180)
-        frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
+        frame = cv2.rotate(frame, cv2.cv2.ROTATE_180)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         if self.daemon:
             self.tracker.run_thread(frame)

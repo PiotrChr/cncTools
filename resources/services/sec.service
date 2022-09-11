@@ -1,0 +1,14 @@
+[Unit]
+Description=Security Service
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=centos
+WorkingDirectory=/home/pchrusciel/cncTools
+ExecStart=make start_uwsgi_sec
+
+[Install]
+WantedBy=multi-user.target

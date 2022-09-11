@@ -60,6 +60,12 @@ install_python_deps:
 install_js_deps:
 	yarn install
 
+install_services:
+	sudo cp resources/services/* /etc/systemd/system/ \
+    && sudo service cam enable \
+    && sudo service sec enable \
+    && sudo service vnc enable
+
 test_cam:
 	python3 scripts/testcam.py
 
@@ -74,3 +80,6 @@ start_uwsgi_cam:
 
 start_uwsgi_sec:
 	uwsgi resources/uwsgi/uwsgi_sec.ini
+
+start_sting_control:
+	python3 stingControl.py

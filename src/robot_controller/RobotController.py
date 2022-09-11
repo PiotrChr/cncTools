@@ -47,11 +47,11 @@ class RobotController:
             self.restart = True
             self.move_camera(self.MOTOR_H, angle)
 
-        # if abs(y_offset) > self.safe_h:
-        #     self.current_lock = 0
-        #     angle = int(cam_pos_v + y_offset * self.v_step)
-        #     print('compenstating Y, moving to: ', angle)
-        #     self.move_camera(self.MOTOR_V, angle)
+        if abs(y_offset) > self.safe_h:
+            self.current_lock = 0
+            angle = int(cam_pos_v + y_offset * self.v_step * -1)
+            print('compenstating Y, moving to: ', angle)
+            self.move_camera(self.MOTOR_V, angle)
 
     def should_handle(self):
         if self.current_lock < self.FRAME_LOCK:
