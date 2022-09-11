@@ -4,7 +4,7 @@ CNCFOLDER := /home/pchrusciel/cncTools
 DLIB_VERSION := 19.24
 
 start_vnc:
-	x11vnc -display :0
+	x11vnc -display :0 -ncache 10
 
 prepare_and_install: prepare_system prepare_python prepare_node prepare_resources install
 
@@ -60,6 +60,13 @@ install_python_deps:
 install_js_deps:
 	yarn install
 
+install_services:
+	sudo cp resources/services/* /etc/systemd/system/ \
+	&& sudo systemctl daemon-reload \
+    && sudo service cam enable \
+    && sudo service sec enable \
+    && sudo service vnc enable
+
 test_cam:
 	python3 scripts/testcam.py
 
@@ -74,3 +81,9 @@ start_uwsgi_cam:
 
 start_uwsgi_sec:
 	uwsgi resources/uwsgi/uwsgi_sec.ini
+
+start_sting_control:
+	python3 stingControl.py
+
+start_x11vnc:
+	x11vnc -wait 50 -noxdamage -passwd PASSWORD -display :0 -forever -o /var/log/x11vnc.log -bg
