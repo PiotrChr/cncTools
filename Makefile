@@ -77,10 +77,10 @@ sync_cnc:
 	rsync -av --exclude={'venv','.idea','__pycache__','node_modules','build'} ./ ${CNCUSER}@${CNCIP}:${CNCFOLDER}
 
 start_uwsgi_cam:
-	uwsgi resources/uwsgi/uwsgi_cam.ini --enable-threads
+	uwsgi resources/uwsgi/uwsgi_cam.ini --enable-threads --logto log/cam.log
 
 start_uwsgi_sec:
-	uwsgi resources/uwsgi/uwsgi_sec.ini
+	uwsgi resources/uwsgi/uwsgi_sec.ini --logto log/sec.log
 
 start_sting_control:
 	python3 stingControl.py

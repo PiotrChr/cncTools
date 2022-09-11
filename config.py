@@ -28,38 +28,33 @@ config = {
         },
         2: {
             "id": 2,
-            "name": "PiHouse",
-            "source": "http://192.168.2.47:8081/cam/video_feed/0",
-        },
-        3: {
-            "id": 3,
             "name": "Workshop 1",
             "source": "http://192.168.2.53:8081/cam/video_feed/0",
         },
-        4: {
-            "id": 4,
+        3: {
+            "id": 3,
             "name": "Workshop 2",
             "source": "http://192.168.2.53:8081/cam/video_feed/2",
         },
-        5: {
-            "id": 5,
+        4: {
+            "id": 4,
             "name": "3D printer 1",
             "source": "http://192.168.2.43/webcam/?action=stream",
             "rotate": 180
         },
-        6: {
-            "id": 6,
+        5: {
+            "id": 5,
             "name": "3D printer 2",
             "source": "http://192.168.2.43:8081/1action=stream",
         },
-        7: {
-            "id": 7,
-            "name": "Pigeon Cam",
-            "source": "http://192.168.2.60:8081/cam/video_feed/0",
-            "rotate": 180
-        },
-        8: {
-            "id": 1,
+        # 6: {
+        #     "id": 6,
+        #     "name": "Pigeon Cam",
+        #     "source": "http://192.168.2.60:8081/cam/video_feed/0",
+        #     "rotate": 180
+        # },
+        6: {
+            "id": 6,
             "name": "Sting Object Detections",
             "kafka": True,
             "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections"
