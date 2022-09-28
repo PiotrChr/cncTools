@@ -26,13 +26,16 @@ class CamLoader(Loader):
     def start_read(self):
         print("Starting thread for camera id:" + str(self.camera_id))
 
-        if not self.by_url:
-            self.vs = VideoStream(src=self.camera_id).start()
-            time.sleep(2)
-            print("Stream for:" + str(self.camera_id) + " started, writing to buffer")
-        else:
-            self.vs = cv2.VideoCapture(self.camera_id)
-            self.vs.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        try:
+            if not self.by_url:
+                self.vs = VideoStream(src=self.camera_id).start()
+                time.sleep(2)
+                print("Stream for:" + str(self.camera_id) + " started, writing to buffer")
+            else:
+                self.vs = cv2.VideoCapture(self.camera_id)
+                self.vs.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        except:
+            print("Something happened ")
 
         self.read()
 

@@ -5,15 +5,26 @@ import cv2
 
 
 class Loader:
+    t: threading.Thread
+    processors: list
+    actions: dict
+    frame = None
+    outputFrame = None
+    refresh_rate: int
+    is_running: bool
+    camera_id: int
+    read_lock: threading.Lock
+
     def __init__(self, refresh_rate, camera_id):
         self.processors = []
         self.actions = {}
         self.frame = None
         self.outputFrame = None
         self.refresh_rate = refresh_rate
-        self.t = None
-        self.is_running = True
+        self.t: threading.Thread
+        self.is_running = False
         self.camera_id = camera_id
+        self.read_lock = threading.Lock()
 
         print("Created cam loader with id:" + str(camera_id))
 
@@ -40,8 +51,10 @@ class Loader:
                     if processor_name in self.actions:
                         self.actions[processor_name](processor.yield_val)
 
+                self.read_lock.acquire()
                 self.outputFrame = self.prepare_output_frame(frame)
                 self.frame = frame
+                self.read_lock.release()
             else:
                 pass
                 # print('no frame')
@@ -53,15 +66,35 @@ class Loader:
         return frame
 
     def start(self):
+        if self.is_running:
+            print("already started!!")
+            return None
+
+        self.is_running = True
+
         self.t = threading.Thread(
             target=self.start_read,
             daemon=False,
         )
+
         self.t.start()
+
+        return self
+
+    def get_output_frame(self):
+        self.read_lock.acquire()
+        frame = self.outputFrame
+        self.read_lock.release()
+
+        return frame
 
     @abc.abstractmethod
     def get_frame(self):
         pass
+
+    def stop(self):
+        self.is_running = False
+        self.t.join()
 
     @abc.abstractmethod
     def start_read(self):

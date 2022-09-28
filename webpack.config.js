@@ -1,8 +1,10 @@
 const path = require('path')
 
 module.exports = {
+  mode: "development",
   entry: {
-    single: path.resolve(__dirname, 'js/entrypoints/', 'single.js')
+    single: path.resolve(__dirname, 'js/entrypoints/', 'single.js'),
+    index: path.resolve(__dirname, 'js/entrypoints/', 'index.js')
   },
   output: {
     path: path.resolve(__dirname, 'static/js/dist'),
@@ -12,6 +14,9 @@ module.exports = {
     rules: [
           {
             test: /\.(jsx|js)$/,
+            resolve: {
+              extensions: [".js", ".jsx"]
+            },
             include: path.resolve(__dirname, 'js'),
             exclude: /node_modules/,
             use: [{

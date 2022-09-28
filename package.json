@@ -24,6 +24,10 @@
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2"
   },
+  "moduleRoots": [
+    "js",
+    "node_modules"
+  ],
   "scripts": {
     "start": "react-scripts start",
     "build": "npx webpack --config webpack.config.js",

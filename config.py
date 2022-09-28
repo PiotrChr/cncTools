@@ -24,7 +24,27 @@ config = {
             "kafka": True,
             "source": "http://192.168.2.53:8081/cam/video_feed/StingFrames/",
             "api": "http://192.168.2.55:8082/api/",
-            "rotate": 180
+            "rotate": 180,
+            "move": {
+                "full": {
+                    "h": "move/0/",
+                    "v": "move/1/"
+                },
+                "step": {
+                    "h": "step/0/",
+                    "v": "step/1/"
+                },
+                "toggle_idle_axis": {
+                    "h": "toggle_idle/0/",
+                    "v": "toggle_idle/1/"
+                },
+                "reset": "reset/",
+                "idle": "idle/",
+                "stop": "stop/",
+                "auto_idle_on": "auto_idle_on/",
+                "auto_idle_off": "auto_idle_off/",
+                "pos": "readpos/"
+            }
         },
         2: {
             "id": 2,
@@ -45,7 +65,7 @@ config = {
         5: {
             "id": 5,
             "name": "3D printer 2",
-            "source": "http://192.168.2.43:8081/1action=stream",
+            "source": "http://192.168.2.43:8081/?action=stream",
         },
         # 6: {
         #     "id": 6,

@@ -2,95 +2,124 @@
 {% set containerClass = "container" %}
 {% block title %}Camera view{% endblock %}
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/dist/single.js') }}"></script>
+{% block scriptsend %}
+    <script>
+        window.dashboardData = {{ dashboard_data }};
+    </script>
+    <script src="{{ url_for('static', filename='js/dist/single.js') }}"></script>
 {% endblock %}
 
 {% block content %}
 {% set rotate = camera.rotate if camera.rotate else 0 -%}
-<div class="row">
-    <div class="col-12">
-        <div class="card cam_card">
-            <img style="transform:rotate({{ rotate }}deg)" class="card-img-top" src="{{ camera.source }}" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title cnc_card-title">{{ camera.name }}</h5>
-                <div class="d-flex align-items-center justify-content-between mt-5" style="clear:both">
-                    <a href="/sec" class="btn btn-primary cnc_card-button">Back</a>
-                    {% if camera.move %}
-                        <div class="camera_control d-flex align-items-center">
-                            <div>
-                                <a id="camera_control_left" href="{{ camera.move.motors.h }}/-1" class="btn d-block"><i class="fa fa-arrow-left"></i></a>
-                            </div>
-                            <div>
-                                <a id="camera_control_up" href="{{ camera.move.motors.v }}/1" class="btn clearfix d-block mb-4"><i class="fa fa-arrow-up"></i></a>
-                                <a id="camera_control_down" href="{{ camera.move.motors.v }}/-1" class="btn d-block mt-4"><i class="fa fa-arrow-down"></i></a>
-                            </div>
-                            <div>
-                                <a id="camera_control_right" href="{{ camera.move.motors.h }}/1" class="btn d-block"><i class="fa fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    {% endif %}
-                    {% if rec_status %}
-                        <a href="{{ url_for('sec.sec_stop_record', camera=camera.id) }}" class="btn btn-danger cnc_card-button">Stop Recording</a>
-                    {% else %}
-                        <a href="{{ url_for('sec.sec_start_record', camera=camera.id) }}" class="btn btn-success cnc_card-button">Start Recording</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% if rec_status %}
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="card cam_card">
-            <div class="card-body">
-                <h4 class="mt-2">Recording status</h4>
-                <div>
-                    <p><span><strong>File name: </strong></span> {{ rec_status.recording_name }}</p>
-                    <p><span><strong>File path: </strong></span> {{ rec_status.name }}</p>
-                    <p><span><strong>Thread: </strong></span> {{ rec_status.thread_name }}</p>
-                    <p><span><strong>Started at: </strong></span> {{ rec_status.started }}</p>
-                    <p><span><strong>Width: </strong></span> {{ rec_status.width }}</p>
-                    <p><span><strong>Height: </strong></span> {{ rec_status.height }}</p>
-                    <p><span><strong>Fps: </strong></span> {{ rec_status.fps }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div class="row">-->
+<!--    <div class="col-12">-->
+<!--        <div class="card cam_card">-->
+<!--            <img style="transform:rotate({{ rotate }}deg)" class="card-img-top" src="{{ camera.source }}" alt="Card image cap">-->
+<!--            <div class="card-body">-->
+<!--                <h5 class="card-title cnc_card-title">{{ camera.name }}</h5>-->
+<!--                <div class="d-flex align-items-center justify-content-between mt-5" style="clear:both">-->
+<!--                    <a href="/sec" class="btn btn-primary cnc_card-button">Back</a>-->
+<!--                    {% if camera.move %}-->
+<!--                        <div class="camera_control d-flex align-items-center">-->
+<!--                            <div>-->
+<!--                                <a id="camera_control_left" href="{{camera.api}}{{camera.move.step.h}}-1" class="btn d-block"><i class="fa fa-arrow-left"></i></a>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <a id="camera_control_up" href="{{camera.api}}{{camera.move.step.v}}-1" class="btn clearfix d-block mb-4"><i class="fa fa-arrow-up"></i></a>-->
+<!--                                <a id="camera_control_down" href="{{camera.api}}{{camera.move.step.v}}1" class="btn d-block mt-4"><i class="fa fa-arrow-down"></i></a>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <a id="camera_control_right" href="{{camera.api}}{{camera.move.step.h}}1" class="btn d-block"><i class="fa fa-arrow-right"></i></a>-->
+<!--                            </div>-->
 
-{% endif %}
-{% if recordings %}
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="card cam_card">
-            <div class="card-body">
-                <h4>Recordings</h4>
-                <table class="table">
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    {% for recording in recordings %}
-                        <tr>
-                            <td>
-                                {{ recording.file }}
-                            </td>
-                            <td>
-                                <a href="{{ url_for('sec.single_video', camera=camera.id, recording=recording.file) }}" class="btn btn-success cnc_card-button">Play</a>
-                            </td>
-                            <td>
-                                <a href="{{ url_for('sec.sec_delete_record', camera=camera.id, recording=recording.file) }}" class="btn btn-danger cnc_card-button">Remove</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
+<!--                        </div>-->
+<!--                    {% endif %}-->
+<!--                    {% if rec_status %}-->
+<!--                        <a href="{{ url_for('sec.sec_stop_record', camera=camera.id) }}" class="btn btn-danger cnc_card-button">Stop Recording</a>-->
+<!--                    {% else %}-->
+<!--                        <a href="{{ url_for('sec.sec_start_record', camera=camera.id) }}" class="btn btn-success cnc_card-button">Start Recording</a>-->
+<!--                    {% endif %}-->
+<!--                </div>-->
+<!--                {% if camera.move %}-->
+<!--                <div class="d-flex flex-column mt-5" style="clear:both">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="vRange" class="form-label">Vertical position</label>-->
+<!--                        <input type="range" class="form-range" id="vRange">-->
+<!--                    </div>-->
 
-            </div>
-        </div>
-    </div>
-</div>
+<!--                    <div class="form-group">-->
+<!--                        <label for="hRange" class="form-label">Horizontal position</label>-->
+<!--                        <input type="range" class="form-range" id="hRange">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="d-flex flex-md-row flex-sm-column justify-content-between mt-5" style="clear:both">-->
+<!--                    <a id="camera_control_reset" href="{{camera.api}}{{camera.move.reset}}" class="btn btn-primary cnc_card-button mt-2">Reset</a>-->
+<!--                    <a id="camera_control_stop" href="{{camera.api}}{{camera.move.stop}}" class="btn btn-danger cnc_card-button mt-2">Stop</a>-->
+<!--                    <a id="camera_control_idle" href="{{camera.api}}{{camera.move.stop}}" class="btn btn-success cnc_card-button mt-2">Idle</a>-->
+<!--                    <a id="camera_control_auto_idle_on" href="{{camera.api}}{{camera.move.stop}}" class="btn btn-success cnc_card-button mt-2">Auto-Idle On</a>-->
+<!--                    <a id="camera_control_auto_idle_off" href="{{camera.api}}{{camera.move.stop}}" class="btn btn-danger cnc_card-button mt-2">Auto-Idle Off</a>-->
+<!--                    <a id="camera_control_idle_v_off" href="{{camera.api}}{{camera.move.toggle_idle_axis}}{{camera.move.toggle_idle_axis.v}}0" class="btn btn-danger cnc_card-button mt-2">Idle V Off</a>-->
+<!--                    <a id="camera_control_idle_v_on" href="{{camera.api}}{{camera.move.toggle_idle_axis}}{{camera.move.toggle_idle_axis.v}}1" class="btn btn-success cnc_card-button mt-2">Idle V On</a>-->
+<!--                    <a id="camera_control_idle_h_off" href="{{camera.api}}{{camera.move.toggle_idle_axis}}{{camera.move.toggle_idle_axis.h}}0" class="btn btn-danger cnc_card-button mt-2">Idle H Off</a>-->
+<!--                    <a id="camera_control_idle_h_on" href="{{camera.api}}{{camera.move.toggle_idle_axis}}{{camera.move.toggle_idle_axis.h}}1" class="btn btn-success cnc_card-button mt-2">Idle H On</a>-->
+<!--                </div>-->
+<!--                {% endif %}-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--{% if rec_status %}-->
+<!--<div class="row mt-5">-->
+<!--    <div class="col-12">-->
+<!--        <div class="card cam_card">-->
+<!--            <div class="card-body">-->
+<!--                <h4 class="mt-2">Recording status</h4>-->
+<!--                <div>-->
+<!--                    <p><span><strong>File name: </strong></span> {{ rec_status.recording_name }}</p>-->
+<!--                    <p><span><strong>File path: </strong></span> {{ rec_status.name }}</p>-->
+<!--                    <p><span><strong>Thread: </strong></span> {{ rec_status.thread_name }}</p>-->
+<!--                    <p><span><strong>Started at: </strong></span> {{ rec_status.started }}</p>-->
+<!--                    <p><span><strong>Width: </strong></span> {{ rec_status.width }}</p>-->
+<!--                    <p><span><strong>Height: </strong></span> {{ rec_status.height }}</p>-->
+<!--                    <p><span><strong>Fps: </strong></span> {{ rec_status.fps }}</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--{% endif %}-->
+<!--{% if recordings %}-->
+<!--<div class="row mt-5">-->
+<!--    <div class="col-12">-->
+<!--        <div class="card cam_card">-->
+<!--            <div class="card-body">-->
+<!--                <h4>Recordings</h4>-->
+<!--                <table class="table">-->
+<!--                    <tr>-->
+<!--                        <th></th>-->
+<!--                        <th></th>-->
+<!--                        <th></th>-->
+<!--                    </tr>-->
+<!--                    {% for recording in recordings %}-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                {{ recording.file }}-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <a href="{{ url_for('sec.single_video', camera=camera.id, recording=recording.file) }}" class="btn btn-success cnc_card-button">Play</a>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <a href="{{ url_for('sec.sec_delete_record', camera=camera.id, recording=recording.file) }}" class="btn btn-danger cnc_card-button">Remove</a>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    {% endfor %}-->
+<!--                </table>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div id="root"></div>
 {% endif %}
 {% endblock %}

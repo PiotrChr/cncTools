@@ -1,17 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from '../pages/Home';
+import Cameras from '../pages/Cameras';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-console.log("Here")
 
 // TODO: Pass a config from global val
 
 root.render(
   <React.StrictMode>
-    <Home />
+    <Cameras />
   </React.StrictMode>
 );
 

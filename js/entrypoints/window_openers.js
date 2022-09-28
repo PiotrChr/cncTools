@@ -1,17 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from '../pages/Home';
+import WindowOpeners from '../pages/WindowOpeners';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-console.log("Here")
 
 // TODO: Pass a config from global val
 
 root.render(
   <React.StrictMode>
-    <Home />
+    <WindowOpeners />
   </React.StrictMode>
 );
 
