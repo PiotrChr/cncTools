@@ -1,40 +1,28 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import { NavLink } from 'react-router-dom'
-
-import {
-  CHeader,
-  CToggler,
-  CHeaderBrand,
-  CHeaderNav,
-  CNavItem,
-  CNavLink,
-  CSubheader,
-  CBreadcrumbRouter,
-  CLink
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import { GlobalContext } from '../../context'
+import classnames from 'classnames'
 
 // TODO: Get links from conf/ maybe context
 
 const Header = (props) => {
+  const context = useContext(GlobalContext)
+  
   return (
-    <CHeader>
-      <CHeaderNav className="d-none d-md-flex me-auto">
-        <CNavItem className="px-3" >
-          <CNavLink to="/" component={NavLink}>Home</CNavLink>
-        </CNavItem>
-        <CNavItem className="px-3" >
-          <CNavLink to="/bookings" component={NavLink}>Bookings</CNavLink>
-        </CNavItem>
-        <CNavItem className="px-3" >
-            <CNavLink to="/cars" component={NavLink}>Cars</CNavLink>
-        </CNavItem>
-        <CNavItem className="px-3" >
-            <CNavLink to="/offices" component={NavLink}>Offices</CNavLink>
-        </CNavItem>
-      </CHeaderNav>
-    </CHeader>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div className='collapse navbar-collapse'>
+            <ul className="navbar-nav mr-auto">
+                { context.menu.map((item, index) => (
+                    <li className="nav-item" key="1" key={index}>
+                        <a className={ classnames("nav-link", item.route==context.current_url ? "active" : "") } href={ item.route }>
+                            { item.name }
+                        </a>
+                    </li>
+                )) }
+            </ul>
+        </div>
+        
+    </nav>
   )
 }
 

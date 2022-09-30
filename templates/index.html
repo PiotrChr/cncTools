@@ -2,7 +2,7 @@
 
 {% block scriptsend %}
     <script>
-        window.dashboardData = {{ dashboard_data }};
+        window.dashboardData = {{ dashboard_data|safe }};
     </script>
     <script src="{{ url_for('static', filename='js/dist/index.js') }}"></script>
 {% endblock %}

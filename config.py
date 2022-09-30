@@ -12,19 +12,21 @@ base_dirs["recordings_dir"] = base_dirs["root_dir"] + base_dirs["recordings_dir_
 
 config = {
     **base_dirs,
-    "cameras": {
-        0: {
+    "cameras": [
+        {
             "id": 0,
             "name": "6040 CNC",
+            "type": "static",
             "source": "http://192.168.2.53:8081/cam/video_feed/4",
         },
-        1: {
+        {
             "id": 1,
             "name": "Sting",
             "kafka": True,
             "source": "http://192.168.2.53:8081/cam/video_feed/StingFrames/",
             "api": "http://192.168.2.55:8082/api/",
             "rotate": 180,
+            "type": "static",
             "move": {
                 "full": {
                     "h": "move/0/",
@@ -46,25 +48,29 @@ config = {
                 "pos": "readpos/"
             }
         },
-        2: {
+        {
             "id": 2,
             "name": "Workshop 1",
+            "type": "static",
             "source": "http://192.168.2.53:8081/cam/video_feed/0",
         },
-        3: {
+        {
             "id": 3,
             "name": "Workshop 2",
+            "type": "static",
             "source": "http://192.168.2.53:8081/cam/video_feed/2",
         },
-        4: {
+        {
             "id": 4,
             "name": "3D printer 1",
+            "type": "dynamic",
             "source": "http://192.168.2.43/webcam/?action=stream",
             "rotate": 180
         },
-        5: {
+        {
             "id": 5,
             "name": "3D printer 2",
+            "type": "dynamic",
             "source": "http://192.168.2.43:8081/?action=stream",
         },
         # 6: {
@@ -73,14 +79,15 @@ config = {
         #     "source": "http://192.168.2.60:8081/cam/video_feed/0",
         #     "rotate": 180
         # },
-        6: {
+        {
             "id": 6,
             "name": "Sting Object Detections",
+            "type": "static",
             "kafka": True,
             "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections"
 
         },
-    },
+    ],
     "relays": {
         "status_url": "192.168.2.56/status",
         "on_url": "192.168.2.56/on",

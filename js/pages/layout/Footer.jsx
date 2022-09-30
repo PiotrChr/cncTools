@@ -1,19 +1,14 @@
 import React from 'react'
-import { CFooter } from '@coreui/react'
 
 // TODO: Add a proper name
 
 const Footer = () => {
   return (
-    <CFooter fixed="false">
-      <div>
-        <span className="ml-1">Dashboard</span>
-      </div>
-      <div className="mfs-auto">
-        <span className="mr-1">Powered by</span>
-        <a href="https://coreui.io/react" target="_blank" rel="noopener noreferrer">CoreUI for React</a>
-      </div>
-    </CFooter>
+    <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div className="col-md-4 d-flex align-items-center">
+          <span className="mb-3 mb-md-0 text-muted">© 2022 Piotr C Smartflat Dashboard</span>
+        </div>
+    </footer>
   )
 }
 

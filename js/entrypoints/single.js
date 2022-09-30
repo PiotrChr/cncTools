@@ -1,26 +1,19 @@
-//import $ from 'jquery';
-//
-//$(() => {
-//    $('.camera_control a').on('click', function (e) {
-//        e.preventDefault();
-//        const url = $(this).attr('href');
-//        fetch(url)
-//          .then(response => console.log(response.json()));
-//    })
-//})
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import SingleCamera from '../pages/SingleCamera';
+import Layout from '../pages/layout/Layout';
+import { GlobalContext } from '../context'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-// TODO: Pass a config from global val
-
 root.render(
   <React.StrictMode>
-    <SingleCamera />
+      <GlobalContext.Provider value={window.dashboardData.context}>
+        <Layout>
+          <SingleCamera camera={ window.dashboardData.camera }/>
+        </Layout>        
+    </GlobalContext.Provider>
   </React.StrictMode>
 );
 

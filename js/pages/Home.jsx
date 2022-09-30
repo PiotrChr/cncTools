@@ -1,6 +1,6 @@
 
 export default () => {
     return (
-        <div>Relays</div>
+        <div>Home</div>
     )
 }

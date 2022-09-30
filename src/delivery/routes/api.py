@@ -52,22 +52,6 @@ def delete_record(camera: int, recording: str):
     return {"data": {"status": "Camera recording removed"}}, 200
 
 
-@api.route('/rec/stop/<int:camera>', methods=["GET"])
-def stop_record(camera: int):
-    if recorder_manager.stop_record(camera):
-        return {"data": {"status": "Camera recording stopped"}}, 200
-
-    return "Error"
-
-
-@api.route('/rec/start/<int:camera>', methods=["GET"])
-def start_record(camera: int):
-    if recorder_manager.start_record(camera):
-        return {"data": {"status": "Camera recording started"}}, 200
-
-    return "Error"
-
-
 @api.route('/window_openers/<string:window_opener_name>/open', methods=['GET'])
 def open_window(window_opener_name: str):
     opener = config['window_openers'][window_opener_name]
@@ -84,7 +68,7 @@ def close_window(window_opener_name: str):
     return {"data": {"status": "Window closed"}}, 200
 
 
-@api.route('/window_openers/<str:window_opener_name>/step_up', methods=['GET'])
+@api.route('/window_openers/<string:window_opener_name>/step_up', methods=['GET'])
 def window_step_up(window_opener_name: str):
     opener = config['window_openers'][window_opener_name]
     req = http.request('GET', opener['source'] + '/step_up')
@@ -92,7 +76,7 @@ def window_step_up(window_opener_name: str):
     return {"data": {"status": "Window stepped up"}}, 200
 
 
-@api.route('/window_openers/<str:window_opener_name>/step_down', methods=['GET'])
+@api.route('/window_openers/<string:window_opener_name>/step_down', methods=['GET'])
 def window_step_down(window_opener_name: str):
     opener = config['window_openers'][window_opener_name]
     req = http.request('GET', opener['source'] + '/step_down')
