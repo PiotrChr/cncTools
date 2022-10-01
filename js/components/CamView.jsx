@@ -6,28 +6,33 @@ import { getCamFps, setCamFps } from '../context'
 const CamView = (props) => {
     const [source, setSource] = useState(props.source)
     const [fps, setFps] = useState(getCamFps(props.id))
-    let timeout;
+
+    let intervalID;
 
     const refresh = () => {
-        setSource(props.source + "?hash=" + Date.now())
-        timeout = setTimeout(refresh, 1000 / props.fps)
+        if (fps > 0) {
+            setSource(props.source + "?hash=" + Date.now())
+            // timeout = setTimeout(refresh, 1000 / fps)
+        }
     }
 
     useEffect(() => {
-      if (props.dynamic) {
-        if (timeout) {
-            clearTimeout(timeout)
+      if (!props.dynamic) {
+        clearInterval(intervalID)
+        
+        if (fps > 0) {
+            intervalID = setInterval(refresh, 1000 / fps);
         }
-        if (props.fps > 0) {
-            refresh()
-        }
+
+        return () => clearInterval(intervalID);
       }
     }, [fps])
     
     const changeFps = useCallback((e) => {
-        console.log(e.target)
-        setCamFps(e.target.value)
-        setFps(e.target.value)
+        const value = e.target.value
+        
+        setCamFps(props.id, value)
+        setFps(value)
     }, [])
 
     return (
@@ -36,7 +41,9 @@ const CamView = (props) => {
             <div style={{ position: 'absolute', top: '10px' }}>
                 <div className="form-group d-flex flex-row align-items-center form-group text-white">
                     <label htmlFor={ "fps_"+ props.index } className="form-label" style={{margin: "10px 20px"}}><strong>FPS</strong></label>
-                    <select className="form-select" aria-label="Refresh rate [FPS]" id={ "fps_" + props.index } onChange={changeFps} value={fps}>
+                    <select
+                        className="form-select"
+                        aria-label="Refresh rate [FPS]" id={ "fps_" + props.index } onChange={changeFps} value={fps}>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -56,7 +63,7 @@ CamView.propTypes = {
     rotate: PropTypes.number,
     index: PropTypes.number,
     dynamic: PropTypes.bool,
-    id: PropTypes.string
+    id: PropTypes.number
 }
 
 CamView.defaultProps = {

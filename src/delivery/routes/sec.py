@@ -9,7 +9,12 @@ sec = Blueprint('sec', __name__)
 
 @sec.route('/recordings', methods=["GET"])
 def recordings():
-    pass
+    return render_template(
+        'recordings.html',
+        dashboard_data=json.dumps({
+            'context': create_context('sec.recordings')
+        })
+    )
 
 
 @sec.route('/window_openers')

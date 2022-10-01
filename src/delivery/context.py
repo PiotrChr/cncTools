@@ -28,8 +28,9 @@ def create_context(current_page: str) -> dict:
     }, 'menu': [
         {"route": url_for('sec.index'), "name": "Home"},
         {"route": url_for('sec.cameras'), "name": "Cameras"},
+        {"route": url_for('sec.recordings'), "name": "Recordings"},
         {"route": url_for('sec.window_openers'), "name": "Window Openers"},
-        {"route": url_for('sec.relays'), "name": "Relays"}
+        {"route": url_for('sec.relays'), "name": "Relays"}        
     ], 'current_url': url_for(current_page)}
 
     return context

@@ -29,6 +29,13 @@ def recording_status():
     return {"recordings": recordings, "status": rec_status}, 200
 
 
+@api.route('/rec/status/<int:camera>', methods=["GET"])
+def recording_status_for_cam(camera: int):
+    rec_status, recordings = recorder_manager.get_full_status_for_cam(camera)
+
+    return {"recordings": recordings, "status": rec_status}, 200
+
+
 @api.route('/rec/stop/<int:camera>', methods=["GET"])
 def stop_record(camera: int):
     if not recorder_manager.stop_record(camera):

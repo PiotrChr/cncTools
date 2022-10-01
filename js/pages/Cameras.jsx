@@ -16,7 +16,7 @@ export default (props) => {
             return (
                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12 label" key={ index }>
                     <div className="card cam_card">
-                        <CamView rotate={rotate} source={ camera.source } index={ index } dynamic={ camera.type == "dynamic" }/>
+                        <CamView rotate={rotate} source={ camera.source } index={ index } dynamic={ camera.type == "dynamic" } id={ camera.id }/>
                         { camera.move &&
                             <div style={{position: 'absolute', right: '20px', color: 'white', fontSize: '40px'}}>
                                 <i className="fa fa-gamepad"></i>

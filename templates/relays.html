@@ -3,7 +3,7 @@
 
 {% block scriptsend %}
     <script>
-        window.dashboardData = {{ dashboard_data }};
+        window.dashboardData = {{ dashboard_data|safe }};
     </script>
     <script src="{{ url_for('static', filename='js/dist/relays.js') }}"></script>
 {% endblock %}

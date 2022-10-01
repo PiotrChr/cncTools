@@ -7,6 +7,7 @@ module.exports = {
     cameras: path.resolve(__dirname, 'js/entrypoints/', 'cameras.js'),
     relays: path.resolve(__dirname, 'js/entrypoints/', 'relays.js'),
     window_openers: path.resolve(__dirname, 'js/entrypoints/', 'window_openers.js'),
+    recordings: path.resolve(__dirname, 'js/entrypoints/', 'recordings.js'),
     index: path.resolve(__dirname, 'js/entrypoints/', 'index.js')
   },
   output: {

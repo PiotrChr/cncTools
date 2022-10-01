@@ -33,7 +33,7 @@ class RecorderManager:
             (_recorder.camera, map_recorder(_recorder)) for _recorder in self.recorders if _recorder.camera == camera
         )
 
-    def get_rec_status(self) -> (dict, dict):
+    def get_rec_status(self):
         return (
             dict((_recorder.camera, map_recorder(_recorder)) for _recorder in self.recorders),
             dict((_cam, self.get_recordings_for_cam(_cam)) for _cam in config['cameras'])
@@ -82,7 +82,7 @@ class RecorderManager:
         return True
 
     def stop_record(self, camera: int) -> bool:
-        _, recorder = self.get_recorder_by_id(camera)
+        key, recorder = self.get_recorder_by_id(camera)
 
         if not recorder:
             return False
@@ -90,6 +90,8 @@ class RecorderManager:
         recorder.halt()
         time.sleep(0.5)
 
+        del self.recorders[key]
+        
         return True
 
     def delete_record(self, camera: int, recording: str) -> None:
