@@ -152,5 +152,16 @@ config = {
             "StingFaceDetections",
             "StingHumanRecognitions"
         }
+        
+    },
+    "apis": {
+        "sting": "http://192.168.2.55:8082/api/"
     }
 }
+
+def get_cam_by_id(_id: int):
+    for camera in config['cameras']:
+        if camera.id == _id:
+            return camera
+        
+    return None

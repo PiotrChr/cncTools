@@ -4,7 +4,7 @@ import time
 
 
 from src.cam.CamRecorder import CamRecorder
-from config import config
+from config import config, get_cam_by_id
 from src.delivery.http.utils import map_recorder
 
 
@@ -15,6 +15,8 @@ class RecorderManager:
         pass
 
     def record(self, camera: int) -> None:
+        cam_config = get_cam_by_id(camera)
+        
         for recorder in self.recorders:
             if recorder.camera == camera:
                 print('Already recording')
@@ -22,7 +24,7 @@ class RecorderManager:
 
         _recorder = CamRecorder(
             camera,
-            config['cameras'][camera]['source'],
+            cam_config['source'],
             on_stop=lambda: self.cleanup_recording(camera)
         )
         _recorder.start()
@@ -36,7 +38,8 @@ class RecorderManager:
     def get_rec_status(self):
         return (
             dict((_recorder.camera, map_recorder(_recorder)) for _recorder in self.recorders),
-            dict((_cam, self.get_recordings_for_cam(_cam)) for _cam in config['cameras'])
+            list(dict({"id": _cam['id'], "recordings": self.get_recordings_for_cam(
+                _cam['id'])}) for _cam in config['cameras'])
         )
 
     def get_recordings_for_cam(self, camera: int):

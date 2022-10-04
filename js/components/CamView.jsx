@@ -5,6 +5,7 @@ import { getCamFps, setCamFps } from '../context'
 
 const CamView = (props) => {
     const [source, setSource] = useState(props.source)
+    const [rotate, setRotate] = useState(props.rotate)
     const [fps, setFps] = useState(getCamFps(props.id))
 
     let intervalID;
@@ -35,26 +36,47 @@ const CamView = (props) => {
         setFps(value)
     }, [])
 
+    const onError = useCallback(() => {
+        setSource("/static/img/camPlaceholder.png");
+        setRotate(0)
+    }, [fps]);
+
     return (
-        <div className="single_cam_view">
-            <img style={{ transform: "rotate(" + props.rotate + "deg)"}} className="card-img-top" src={ source } alt="Card image cap" />
-            <div style={{ position: 'absolute', top: '10px' }}>
-                <div className="form-group d-flex flex-row align-items-center form-group text-white">
-                    <label htmlFor={ "fps_"+ props.index } className="form-label" style={{margin: "10px 20px"}}><strong>FPS</strong></label>
-                    <select
-                        className="form-select"
-                        aria-label="Refresh rate [FPS]" id={ "fps_" + props.index } onChange={changeFps} value={fps}>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                    </select>
-                </div>
-            </div>
-            
-        </div>        
-    )
+      <div className="single_cam_view">
+        <img
+          style={{
+            transform: "rotate(" + rotate + "deg)",
+          }}
+          className="card-img-top"
+          src={source}
+          onError={ onError }
+        />
+        <div style={{ position: "absolute", top: "10px" }}>
+          <div className="form-group d-flex flex-row align-items-center form-group text-white">
+            <label
+              htmlFor={"fps_" + props.index}
+              className="form-label"
+              style={{ margin: "10px 20px" }}
+            >
+              <strong>FPS</strong>
+            </label>
+            <select
+              className="form-select"
+              aria-label="Refresh rate [FPS]"
+              id={"fps_" + props.index}
+              onChange={changeFps}
+              value={fps}
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    );
 }
 
 CamView.propTypes = {

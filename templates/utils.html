@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% set containerClass = "container" %}
+{% block title %}Utils{% endblock %}
+
+{% block scriptsend %}
+    <script>
+        window.dashboardData = {{ dashboard_data|safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/dist/utils.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="root"></div>
+{% endblock %}

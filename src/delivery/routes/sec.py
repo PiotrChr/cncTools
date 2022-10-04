@@ -12,7 +12,17 @@ def recordings():
     return render_template(
         'recordings.html',
         dashboard_data=json.dumps({
-            'context': create_context('sec.recordings')
+            'context': create_context('sec.recordings', config['cameras'])
+        })
+    )
+
+
+@sec.route('/utils')
+def utils():
+    return render_template(
+        'utils.html',
+        dashboard_data=json.dumps({
+            'context': create_context('sec.utils', config['cameras'])
         })
     )
 
@@ -22,7 +32,7 @@ def window_openers():
     return render_template(
         'window_openers.html',
         dashboard_data=json.dumps({
-            'context': create_context('sec.window_openers'),
+            'context': create_context('sec.window_openers', config['cameras']),
             'window_openers': config['window_openers']
         })
     )
@@ -35,7 +45,7 @@ def single():
     return render_template(
         'single.html',
         dashboard_data=json.dumps({
-            'context': create_context('sec.single'),
+            'context': create_context('sec.single', config['cameras']),
             'camera': config['cameras'][camera],
         })
     )
@@ -51,7 +61,7 @@ def single_video():
     return render_template(
         'single_video.html',
         dashboard_data=json.dumps({
-            'context': create_context('sec.single_video'),
+            'context': create_context('sec.single_video', config['cameras']),
             'camera': camera,
             'web_path': web_path,
             'recording': recording
@@ -62,16 +72,14 @@ def single_video():
 @sec.route('/cameras', methods=["GET"])
 def cameras():
     return render_template('cameras.html', dashboard_data=json.dumps({
-        'context': create_context('sec.cameras'),
-        'cameras': config['cameras']
+        'context': create_context('sec.cameras', config['cameras'])
     }))
 
 
 @sec.route('/relays', methods=["GET"])
 def relays():
     return render_template('relays.html', dashboard_data=json.dumps({
-        'context': create_context('sec.relays'),
-        'cameras': config['cameras']
+        'context': create_context('sec.relays', config['cameras'])
     }))
 
 

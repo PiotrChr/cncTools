@@ -1,14 +1,14 @@
 import React from 'react'
 
 const Recordings = (props) => {
-    if (props.recordings.length == 0) return null
+    if (!props.recordings || props.recordings.length == 0) return null
 
     return (
       <div className="row mt-5">
         <div className="col-12">
           <div className="card cam_card">
             <div className="card-body">
-              <h4>Recordings</h4>
+              <h5>Recordings</h5>
 
               <table className="table">
                 <thead>

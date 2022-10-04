@@ -31,3 +31,11 @@
     border-radius: 25px;
     position: relative;
 }
+
+.single_cam_view {
+    flex-grow: 1;
+}
+
+.cam_card > .card-body {
+    flex: 0 1 auto;
+}

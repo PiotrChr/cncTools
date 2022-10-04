@@ -8,7 +8,8 @@ module.exports = {
     relays: path.resolve(__dirname, 'js/entrypoints/', 'relays.js'),
     window_openers: path.resolve(__dirname, 'js/entrypoints/', 'window_openers.js'),
     recordings: path.resolve(__dirname, 'js/entrypoints/', 'recordings.js'),
-    index: path.resolve(__dirname, 'js/entrypoints/', 'index.js')
+    index: path.resolve(__dirname, 'js/entrypoints/', 'index.js'),
+    utils: path.resolve(__dirname, 'js/entrypoints/', 'utils.js')
   },
   output: {
     path: path.resolve(__dirname, 'static/js/dist'),

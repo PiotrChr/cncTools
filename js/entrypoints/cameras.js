@@ -13,7 +13,7 @@ root.render(
   <React.StrictMode>
     <GlobalContext.Provider value={window.dashboardData.context}>
       <Layout>
-        <Cameras cameras={window.dashboardData.cameras}/>
+        <Cameras cameras={window.dashboardData.context.cameras}/>
       </Layout>
     </GlobalContext.Provider>    
   </React.StrictMode>

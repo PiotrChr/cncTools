@@ -11,4 +11,15 @@ export const setCamFps = (cam, value) => {
     Cookies.set(cookieCamPrefix + cam, value)
 }
 
+export const getCamConfigById = (cameras, camId) => {
+    let cam = null
+    cameras.forEach((camera) => {
+      if (camera.id == camId) {
+        cam = camera;
+      }
+    });
+
+    return cam
+}
+
 export const GlobalContext = React.createContext();
