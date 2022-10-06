@@ -55,7 +55,7 @@ export default (props) => {
                     <CamView source={ camera.source } rotate={ rotate } index={ camera.id } dynamic={ camera.type == 'dynamic' } id={ camera.id }/>
                     <div className="card-body">
                         <h5 className="card-title cnc_card-title">{ camera.name }</h5>
-                        <div className="d-flex  flex-column justify-content-between mt-5" style={{ clear: "both" }}>
+                        <div className="d-flex  flex-column justify-content-between" style={{ clear: "both" }}>
                             <div>
                                 <a href="/sec" className="btn btn-primary cnc_card-button">Back</a>
                                 { recStatus

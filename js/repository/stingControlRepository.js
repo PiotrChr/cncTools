@@ -1,22 +1,26 @@
 import { AbstractApiRepository } from "./abstractApiRepository";
 
-export default class SystemRepository extends AbstractApiRepository {
+export default class StingControlRepository extends AbstractApiRepository {
   apiUrl = "sting/";
 
   async idleMove() {
     return this.fetchJson(`${this.apiUrl}idle_move/`);
   }
 
-  async idleIdleOn() {
+  async autoIdleOn() {
     return this.fetchJson(`${this.apiUrl}auto_idle_on/`);
   }
 
-  async idleIdleOff() {
+  async autoIdleOff() {
     return this.fetchJson(`${this.apiUrl}auto_idle_off/`);
   }
 
   async reset() {
     return this.fetchJson(`${this.apiUrl}reset/`);
+  }
+
+  async stop() {
+    return this.fetchJson(`${this.apiUrl}stop/`);
   }
 
   async step(motor, direction) {
@@ -33,5 +37,9 @@ export default class SystemRepository extends AbstractApiRepository {
 
   async toggleIdle(motor, value) {
     return this.fetchJson(`${this.apiUrl}toggle_idle/${motor}/${value}`);
+  }
+
+  async status() {
+    return this.fetchJson(`${this.apiUrl}status/`);
   }
 }

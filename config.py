@@ -161,7 +161,7 @@ config = {
 
 def get_cam_by_id(_id: int):
     for camera in config['cameras']:
-        if camera.id == _id:
+        if camera['id'] == _id:
             return camera
         
     return None

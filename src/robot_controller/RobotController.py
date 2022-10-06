@@ -83,14 +83,32 @@ class RobotController:
 
     def readpos(self):
         res = http.request('GET', sting_cam_config["api"] + 'readpos/')
-        position = (json.loads(res.data))['position']
+        
+        if res.status == 200:
+            position = (json.loads(res.data))['position']
 
-        return position['v'], position['h']
+            return position['v'], position['h']
+        
+        else:
+            raise Exception
+        
+    def status(self):
+        res = http.request('GET', sting_cam_config["api"] + 'readpos/')
+
+        if res.status == 200:
+            return (json.loads(res.data))
+
+        else:
+            raise Exception
 
     def toggle_idle(self, motor, value):
         http.request(
-            'GET', sting_cam_config["api"] + 'toggle_idle/' + str(motor) + '/' + str(value) + + '/')
+            'GET', sting_cam_config["api"] + 'toggle_idle/' + str(motor) + '/' + str(value) + '/')
 
     def idle_speed(self, speed):
         http.request(
             'GET', sting_cam_config["api"] + 'idle_speed/' + str(speed) + '/')
+
+    def stop(self):
+        http.request(
+            'GET', sting_cam_config["api"] + 'stop/')
