@@ -58,6 +58,7 @@ class CamRecorder(threading.Thread):
 
     def start_record(self):
         self.vcap = cv2.VideoCapture(self.source)
+        self.stop = False
         self.prepare()
 
         print("Started recording to: " + self.temp_file_name)

@@ -1,8 +1,15 @@
 const path = require('path')
 
 module.exports = {
+  mode: "development",
   entry: {
-    single: path.resolve(__dirname, 'js/entrypoints/', 'single.js')
+    single: path.resolve(__dirname, 'js/entrypoints/', 'single.js'),
+    cameras: path.resolve(__dirname, 'js/entrypoints/', 'cameras.js'),
+    relays: path.resolve(__dirname, 'js/entrypoints/', 'relays.js'),
+    window_openers: path.resolve(__dirname, 'js/entrypoints/', 'window_openers.js'),
+    recordings: path.resolve(__dirname, 'js/entrypoints/', 'recordings.js'),
+    index: path.resolve(__dirname, 'js/entrypoints/', 'index.js'),
+    utils: path.resolve(__dirname, 'js/entrypoints/', 'utils.js')
   },
   output: {
     path: path.resolve(__dirname, 'static/js/dist'),
@@ -12,6 +19,9 @@ module.exports = {
     rules: [
           {
             test: /\.(jsx|js)$/,
+            resolve: {
+              extensions: [".js", ".jsx"]
+            },
             include: path.resolve(__dirname, 'js'),
             exclude: /node_modules/,
             use: [{

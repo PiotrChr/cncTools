@@ -1,13 +1,12 @@
 import time
 
-from flask import Flask, Blueprint, Response, jsonify, request
+from flask import Flask, Blueprint, Response, jsonify, request, make_response, abort
 import threading
 import argparse
 from src.cam.CamLoader import CamLoader
 from src.cam.KafkaLoader import KafkaLoader
 from config import config
 
-outputFrame = None
 lock = threading.Lock()
 
 loaders = []
@@ -30,27 +29,31 @@ def generate_frames(camera_id):
     if _loader is None:
         raise Exception("No loader with id: " + str(camera_id) + " found")
 
-    while True:
-        if _loader.outputFrame is None:
-            print("No output for camera: " + str(camera_id))
-            time.sleep(1)
-            continue
+    outputFrame = _loader.get_output_frame()
 
-        time.sleep(0.1)
-        yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + _loader.outputFrame + b'\r\n')
+    if outputFrame is None:
+        print("No output for camera: " + str(camera_id))
+        abort(404)
+
+    return outputFrame
 
 
 @cam.route('/video_feed/<string:camera_id>/', methods=["GET"])
 def video_feed(camera_id):
     """Video streaming route. Put this in the src attribute of an img tag."""
+
+    print('Trying to get frame for camera: ' + str(camera_id))
+
+    # Try converting to int if it's a number, otherwise carry on with str index
     try:
         camera_id = int(camera_id)
     except:
         pass
 
-    return Response(generate_frames(camera_id),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+    response = make_response(generate_frames(camera_id))
+    response.headers['Content-Type'] = 'image/png'
+
+    return response
 
 
 @main.errorhandler(404)

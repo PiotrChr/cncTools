@@ -1,9 +1,10 @@
 import urllib3
 import json
-from config import config
+from config import config, get_cam_by_id
 
 http = urllib3.PoolManager()
 
+sting_cam_config = get_cam_by_id(1)
 
 class RobotController:
     FRAME_LOCK = 10
@@ -61,27 +62,53 @@ class RobotController:
         return True
 
     def move_camera(self, motor, angle):
-        url = "%s%s/%s/%s/" % (config["cameras"][1]["api"], 'move', motor, angle)
+        url = "%s%s/%s/%s/" % (sting_cam_config["api"], 'move', motor, angle)
         res = http.request('GET',  url)
 
     def step(self, motor, direction=0):
-        url = "%s%s/%s/%s/" % (config["cameras"][1]["api"], 'step', motor, direction)
+        url = "%s%s/%s/%s/" % (sting_cam_config["api"], 'step', motor, direction)
         res = http.request('GET',  url)
 
     def idle_move(self):
-        res = http.request('GET', config["cameras"][1]["api"] + 'idle/')
+        res = http.request('GET', sting_cam_config["api"] + 'idle/')
 
     def auto_idle_on(self):
-        res = http.request('GET', config["cameras"][1]["api"] + 'auto_idle_on/')
+        res = http.request('GET', sting_cam_config["api"] + 'auto_idle_on/')
 
     def auto_idle_off(self):
-        res = http.request('GET', config["cameras"][1]["api"] + 'auto_idle_off/')
+        res = http.request('GET', sting_cam_config["api"] + 'auto_idle_off/')
 
     def reset(self):
-        http.request('GET', config["cameras"][1]["api"] + 'reset/')
+        http.request('GET', sting_cam_config["api"] + 'reset/')
 
     def readpos(self):
-        res = http.request('GET', config["cameras"][1]["api"] + 'readpos/')
-        position = (json.loads(res.data))['position']
+        res = http.request('GET', sting_cam_config["api"] + 'readpos/')
+        
+        if res.status == 200:
+            position = (json.loads(res.data))['position']
 
-        return position['v'], position['h']
+            return position['v'], position['h']
+        
+        else:
+            raise Exception
+        
+    def status(self):
+        res = http.request('GET', sting_cam_config["api"] + 'readpos/')
+
+        if res.status == 200:
+            return (json.loads(res.data))
+
+        else:
+            raise Exception
+
+    def toggle_idle(self, motor, value):
+        http.request(
+            'GET', sting_cam_config["api"] + 'toggle_idle/' + str(motor) + '/' + str(value) + '/')
+
+    def idle_speed(self, speed):
+        http.request(
+            'GET', sting_cam_config["api"] + 'idle_speed/' + str(speed) + '/')
+
+    def stop(self):
+        http.request(
+            'GET', sting_cam_config["api"] + 'stop/')

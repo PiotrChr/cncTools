@@ -138,3 +138,5 @@ tmp/*
 static/js/dist
 resources/object_tracker
 .DS_Store
+log/*
+

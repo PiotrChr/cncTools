@@ -12,60 +12,82 @@ base_dirs["recordings_dir"] = base_dirs["root_dir"] + base_dirs["recordings_dir_
 
 config = {
     **base_dirs,
-    "cameras": {
-        0: {
+    "cameras": [
+        {
             "id": 0,
             "name": "6040 CNC",
+            "type": "static",
             "source": "http://192.168.2.53:8081/cam/video_feed/4",
         },
-        1: {
+        {
             "id": 1,
             "name": "Sting",
             "kafka": True,
             "source": "http://192.168.2.53:8081/cam/video_feed/StingFrames/",
             "api": "http://192.168.2.55:8082/api/",
-            "rotate": 180
+            "rotate": 180,
+            "type": "static",
+            "move": {
+                "full": {
+                    "h": "move/0/",
+                    "v": "move/1/"
+                },
+                "step": {
+                    "h": "step/0/",
+                    "v": "step/1/"
+                },
+                "toggle_idle_axis": {
+                    "h": "toggle_idle/0/",
+                    "v": "toggle_idle/1/"
+                },
+                "reset": "reset/",
+                "idle": "idle/",
+                "stop": "stop/",
+                "auto_idle_on": "auto_idle_on/",
+                "auto_idle_off": "auto_idle_off/",
+                "pos": "readpos/"
+            }
         },
-        2: {
+        {
             "id": 2,
-            "name": "PiHouse",
-            "source": "http://192.168.2.47:8081/cam/video_feed/0",
-        },
-        3: {
-            "id": 3,
             "name": "Workshop 1",
+            "type": "static",
             "source": "http://192.168.2.53:8081/cam/video_feed/0",
         },
-        4: {
-            "id": 4,
+        {
+            "id": 3,
             "name": "Workshop 2",
+            "type": "static",
             "source": "http://192.168.2.53:8081/cam/video_feed/2",
         },
-        5: {
-            "id": 5,
+        {
+            "id": 4,
             "name": "3D printer 1",
+            "type": "dynamic",
             "source": "http://192.168.2.43/webcam/?action=stream",
             "rotate": 180
         },
-        6: {
-            "id": 6,
+        {
+            "id": 5,
             "name": "3D printer 2",
-            "source": "http://192.168.2.43:8081/1action=stream",
+            "type": "dynamic",
+            "source": "http://192.168.2.43:8081/?action=stream",
         },
-        7: {
-            "id": 7,
-            "name": "Pigeon Cam",
-            "source": "http://192.168.2.60:8081/cam/video_feed/0",
-            "rotate": 180
-        },
-        8: {
-            "id": 1,
+        # 6: {
+        #     "id": 6,
+        #     "name": "Pigeon Cam",
+        #     "source": "http://192.168.2.60:8081/cam/video_feed/0",
+        #     "rotate": 180
+        # },
+        {
+            "id": 6,
             "name": "Sting Object Detections",
+            "type": "static",
             "kafka": True,
             "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections"
 
         },
-    },
+    ],
     "relays": {
         "status_url": "192.168.2.56/status",
         "on_url": "192.168.2.56/on",
@@ -130,5 +152,16 @@ config = {
             "StingFaceDetections",
             "StingHumanRecognitions"
         }
+        
+    },
+    "apis": {
+        "sting": "http://192.168.2.55:8082/api/"
     }
 }
+
+def get_cam_by_id(_id: int):
+    for camera in config['cameras']:
+        if camera['id'] == _id:
+            return camera
+        
+    return None

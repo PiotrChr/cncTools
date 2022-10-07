@@ -27,7 +27,16 @@
 .camera_control {
     float: left;
     padding: 2px;
-    border: 1px solid darkgray;
+    border: 1px solid #e1e1e1;
     border-radius: 25px;
     position: relative;
+    box-shadow: #f3f3f3 2px 2px;
+}
+
+.single_cam_view {
+    flex-grow: 1;
+}
+
+.cam_card > .card-body {
+    flex: 0 1 auto;
 }
