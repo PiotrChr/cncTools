@@ -32,45 +32,83 @@ export default (props) => {
     }, [])
 
     const fetchStatus = () => {
-        recordingsRepository.getRecStatusForCam(camera.id).then((data) => {
-          setRecordings(data.recordings);
+        recordingsRepository.getRecStatusForCam(camera.id).then(({data}) => {
+          setRecordings(data.recordings.recordings);
           setRecStatus(data.status);
         });
     }
 
-    const startRecord = useCallback(() => {
+    const startRecording = useCallback(() => {
         recordingsRepository.startRecording(camera.id)
         setTimeout(fetchStatus, 1000)
     }, [])
 
-    const stopRecord = useCallback(() => {
+    const stopRecording = useCallback(() => {
         recordingsRepository.stopRecording(camera.id);
         setTimeout(fetchStatus, 500);
     })
 
+    const removeRecording = useCallback((camera, recording) => {
+        recordingsRepository.removeRecording(camera, recording);
+        setTimeout(fetchStatus, 1000);
+    }, []);
+
+    const playRecording = useCallback(() => {
+
+    }, [])
+
     return (
-        <div className='row'>
-            <div className='col-12'>
-                <div className='card cam_card'>
-                    <CamView source={ camera.source } rotate={ rotate } index={ camera.id } dynamic={ camera.type == 'dynamic' } id={ camera.id }/>
-                    <div className="card-body">
-                        <h5 className="card-title cnc_card-title">{ camera.name }</h5>
-                        <div className="d-flex  flex-column justify-content-between" style={{ clear: "both" }}>
-                            <div>
-                                <a href="/sec" className="btn btn-primary cnc_card-button">Back</a>
-                                { recStatus
-                                    ? <a onClick={ stopRecord } className="btn btn-danger cnc_card-button">Stop Recording</a>
-                                    : <a onClick={ startRecord } className="btn btn-success cnc_card-button me-5">Start Recording</a>
-                                }
-                            </div>
-                            
-                            { camera.move && <CamControls camera={camera}/> }
-                        </div>
-                    </div>
+      <div className="row">
+        <div className="col-12">
+          <div className="card cam_card">
+            <CamView
+              source={camera.source}
+              rotate={rotate}
+              index={camera.id}
+              dynamic={camera.type == "dynamic"}
+              id={camera.id}
+            />
+            <div className="card-body">
+              <h5 className="card-title cnc_card-title">{camera.name}</h5>
+              <div
+                className="d-flex  flex-column justify-content-between"
+                style={{ clear: "both" }}
+              >
+                <div>
+                  <a href="/sec" className="btn btn-primary cnc_card-button">
+                    Back
+                  </a>
+                  {recStatus ? (
+                    <a
+                      onClick={stopRecording}
+                      className="btn btn-danger cnc_card-button"
+                    >
+                      Stop Recording
+                    </a>
+                  ) : (
+                    <a
+                      onClick={startRecording}
+                      className="btn btn-success cnc_card-button me-5"
+                    >
+                      Start Recording
+                    </a>
+                  )}
                 </div>
+
+                {camera.move && <CamControls camera={camera} />}
+              </div>
             </div>
-            { recStatus && <RecStatus { ...recStatus }/> }
-            { recordings && <Recordings recordings={recordings}/> }
+          </div>
         </div>
-    )
+        {recStatus && <RecStatus {...recStatus} />}
+        {recordings && (
+          <Recordings
+            recordings={recordings}
+            cameraId={camera.id}
+            onPlay={playRecording}
+            onRemove={removeRecording}
+          />
+        )}
+      </div>
+    );
 }

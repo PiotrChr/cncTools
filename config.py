@@ -115,13 +115,13 @@ config = {
             }
         }
     },
-    "window_openers": {
-        "living_room_1": {
+    "window_openers": [
+        {
             "id": 1,
             "source": "192.168.2.61",
             "name": "Living room 1"
         }
-    },
+    ],
     "kafka": {
         "servers": "192.168.2.53:29092",
         "face_detector_conf": {

@@ -10,7 +10,9 @@ sec = Blueprint('sec', __name__)
 @sec.route('/recordings', methods=["GET"])
 def recordings():
     return render_template(
-        'recordings.html',
+        'default.html',
+        pageTitle='Recordings',
+        jsFile=url_for('static', filename='js/dist/recordings.js'),
         dashboard_data=json.dumps({
             'context': create_context('sec.recordings', config['cameras'])
         })
@@ -20,7 +22,9 @@ def recordings():
 @sec.route('/utils')
 def utils():
     return render_template(
-        'utils.html',
+        'default.html',
+        pageTitle='Utils',
+        jsFile=url_for('static', filename='js/dist/utils.js'),
         dashboard_data=json.dumps({
             'context': create_context('sec.utils', config['cameras'])
         })
@@ -30,7 +34,9 @@ def utils():
 @sec.route('/window_openers')
 def window_openers():
     return render_template(
-        'window_openers.html',
+        'default.html',
+        pageTitle='Window Openers',
+        jsFile=url_for('static', filename='js/dist/window_openers.js'),
         dashboard_data=json.dumps({
             'context': create_context('sec.window_openers', config['cameras']),
             'window_openers': config['window_openers']
@@ -43,7 +49,9 @@ def single():
     camera = request.args.get('r', default="0", type=int)
 
     return render_template(
-        'single.html',
+        'default.html',
+        pageTitle='Single Camera',
+        jsFile=url_for('static', filename='js/dist/single.js'),
         dashboard_data=json.dumps({
             'context': create_context('sec.single', config['cameras']),
             'camera': config['cameras'][camera],
@@ -71,16 +79,35 @@ def single_video():
 
 @sec.route('/cameras', methods=["GET"])
 def cameras():
-    return render_template('cameras.html', dashboard_data=json.dumps({
-        'context': create_context('sec.cameras', config['cameras'])
+    return render_template(
+        'default.html', 
+        pageTitle='Overseer eye',
+        jsFile=url_for('static', filename='js/dist/cameras.js'),
+        dashboard_data=json.dumps({
+            'context': create_context('sec.cameras', config['cameras'])
     }))
 
 
 @sec.route('/relays', methods=["GET"])
 def relays():
-    return render_template('relays.html', dashboard_data=json.dumps({
-        'context': create_context('sec.relays', config['cameras'])
+    return render_template(
+        'default.html',
+        pageTitle='Relays',
+        jsFile=url_for('static', filename='js/dist/relays.js'),
+        dashboard_data=json.dumps({
+            'context': create_context('sec.relays', config['cameras'])
     }))
+
+
+@sec.route('/notifications', methods=["GET"])
+def notifications():
+    return render_template(
+        'default.html',
+        pageTitle='Notifications',
+        jsFile=url_for('static', filename='js/dist/notifications.js'),
+        dashboard_data=json.dumps({
+            'context': create_context('sec.notifications', config['cameras'])
+        }))
 
 
 @sec.route('/', methods=["GET"])

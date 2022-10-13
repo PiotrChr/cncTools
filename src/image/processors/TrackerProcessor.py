@@ -21,9 +21,12 @@ class TrackerProcessor(Processor):
 
         self.last_recognition_id = None
         self.HDProducer = StingHumanDetectionProducer()
-
+    
+    def reset_tracking(self):
+        self.tracker.tracker = None
+    
     def on_track(self, frame, object_center, object_offset, image_dim):
-        self.robot_controller.compensate(object_offset, image_dim)
+        self.robot_controller.compensate(object_offset, image_dim, self.reset_tracking)
 
         # if frame is not None:
         #     byte_image = cv2.imencode('.jpg', frame)[1].tostring()

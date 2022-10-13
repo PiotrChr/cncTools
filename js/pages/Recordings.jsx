@@ -12,7 +12,7 @@ const Recordings = (props) => {
 
     useEffect(() => {
         recordingsRepository.getRecStatus()
-        .then((data) => {
+        .then(({data}) => {
             setRecordings(data.recordings)
         })
     }, [])

@@ -23,14 +23,14 @@ class RobotController:
         self.v_step = None
         self.restart = False
 
-    def compensate(self, object_offset, image_dim):
+    def compensate(self, object_offset, image_dim, on_moved):
         # if not self.should_handle():
         #     return
 
         if not self.safe_w:
             w, h = image_dim
             self.safe_h = h/4
-            self.safe_w = w/4
+            self.safe_w = w/7
             self.h_step = self.H_ANGLE/w
             self.v_step = self.V_ANGLE/h
 
@@ -41,18 +41,24 @@ class RobotController:
 
         cam_pos_v, cam_pos_h = self.readpos()
 
+        moved = False
+        
         if abs(x_offset) > self.safe_w:
             self.current_lock = 0
             angle = min(max(0, int(cam_pos_h + x_offset * self.h_step * -1)), 180)
             print('compenstating X, moving to: ', angle)
-            self.restart = True
+            moved = True
             self.move_camera(self.MOTOR_H, angle)
 
         if abs(y_offset) > self.safe_h:
             self.current_lock = 0
             angle = int(cam_pos_v + y_offset * self.v_step * -1)
             print('compenstating Y, moving to: ', angle)
+            moved = True
             self.move_camera(self.MOTOR_V, angle)
+            
+        if moved:
+            on_moved()
 
     def should_handle(self):
         if self.current_lock < self.FRAME_LOCK:
