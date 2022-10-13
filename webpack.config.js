@@ -9,7 +9,8 @@ module.exports = {
     window_openers: path.resolve(__dirname, 'js/entrypoints/', 'window_openers.js'),
     recordings: path.resolve(__dirname, 'js/entrypoints/', 'recordings.js'),
     index: path.resolve(__dirname, 'js/entrypoints/', 'index.js'),
-    utils: path.resolve(__dirname, 'js/entrypoints/', 'utils.js')
+    utils: path.resolve(__dirname, 'js/entrypoints/', 'utils.js'),
+    notifications: path.resolve(__dirname, 'js/entrypoints/', 'notifications.js')
   },
   output: {
     path: path.resolve(__dirname, 'static/js/dist'),

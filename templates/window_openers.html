@@ -5,32 +5,9 @@
     <script>
         window.dashboardData = {{ dashboard_data|safe }};
     </script>
-    <script src="{{ url_for('static', filename='js/dist/window_openers.js') }}"></script>
+    <script src="{{ jsFile }}"></script>
 {% endblock %}
 
 {% block content %}
-<!--{% for window_opener in window_openers %}-->
-<!--<div class="row mb-2">-->
-<!--    <div class="col-12">-->
-<!--        <div class="card cam_card">-->
-<!--            <div class="card-body">-->
-<!--                <h5 class="card-title cnc_card-title">{{ window_openers[window_opener].name }}</h5>-->
-<!--                <div class="d-flex align-items-center justify-content-between">-->
-<!--                    <div class="d-flex align-items-center justify-content-between">-->
-<!--                        <a href="{{ url_for('sec.open_window', window_opener_name=window_opener) }}" class="btn btn-success cnc_card-button mr-3">Open</a>-->
-<!--                        <a href="{{ url_for('sec.close_window', window_opener_name=window_opener) }}" class="btn btn-danger cnc_card-button">Close</a>-->
-<!--                    </div>-->
-<!--                    <form>-->
-<!--                        <div class="form-group">-->
-<!--                            <input type="range" name="open_to_value" min="0" max="100" step="5" class="mr-3">-->
-<!--                            <button type="submit" class="btn btn-primary">Set</button>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--{% endfor %}-->
-<div id="root"></div>
+    <div id="root"></div>
 {% endblock %}

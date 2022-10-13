@@ -1,14 +1,14 @@
 [Unit]
-Description=Security Service
+Description=Detector Service
 After=network.target
 StartLimitIntervalSec=0
 [Service]
 Type=simple
 Restart=always
-RestartSec=5
+RestartSec=10
 User=pchrusciel
 WorkingDirectory=/home/pchrusciel/cncTools
-ExecStart=make start_uwsgi_sec
+ExecStart=python3 stingControl.py
 
 [Install]
 WantedBy=multi-user.target

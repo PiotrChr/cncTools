@@ -35,6 +35,7 @@
 
 .single_cam_view {
     flex-grow: 1;
+    background: black;
 }
 
 .cam_card > .card-body {

@@ -1,0 +1,1 @@
+pchrusciel ALL= NOPASSWD: /bin/systemctl start detector.service, /bin/systemctl stop detector.service, /bin/systemctl restart detector.service

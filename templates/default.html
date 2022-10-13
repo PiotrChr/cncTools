@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
-{% set containerClass = "container" %}
-{% block title %}Utils{% endblock %}
 
 {% block scriptsend %}
-    <script>
+<script>
         window.dashboardData = {{ dashboard_data|safe }};
     </script>
-    <script src="{{ url_for('static', filename='js/dist/utils.js') }}"></script>
+<script src="{{ jsFile }}"></script>
 {% endblock %}
+
+{% block containerClass %}containerFluid{% endblock %}
+{% block title %}{{ pageTitle }}{% endblock %}
 
 {% block content %}
     <div id="root"></div>

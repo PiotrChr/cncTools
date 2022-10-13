@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Recordings = (props) => {
     if (!props.recordings || props.recordings.length == 0) return null
@@ -23,12 +24,12 @@ const Recordings = (props) => {
                     <tr key={index}>
                       <td>{recording.file}</td>
                       <td>
-                        <a href="urlforsinglevid" className="btn btn-success cnc_card-button">
+                        <a onClick={ () => props.onPlay(props.cameraId, recording.file) } className="btn btn-success cnc_card-button">
                           Play
                         </a>
                       </td>
                       <td>
-                        <a href="urlfordeleterecord" className="btn btn-danger cnc_card-button" >
+                        <a onClick={ () => props.onRemove(props.cameraId, recording.file) } className="btn btn-danger cnc_card-button">
                           Remove
                         </a>
                       </td>
@@ -44,7 +45,14 @@ const Recordings = (props) => {
 }
 
 Recordings.defaultProps = {
-    recordings: []
+    recordings: [],
+}
+
+Recordings.propTypes = {
+  recordings: PropTypes.array,
+  onRemove: PropTypes.func,
+  onPlay: PropTypes.func,
+  cameraId: PropTypes.number
 }
 
 export default Recordings

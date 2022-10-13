@@ -13,7 +13,7 @@ const V_STEP = (V_MAX - V_MIN) / 10
 
 const H_MAX = 180
 const H_MIN = 0
-const H_STEP = (H_MAX - H_MIN) / 20;
+const H_STEP = (H_MAX - H_MIN) / 30;
 
 const MOTORS = {'h': 0, 'v': 1}
 
@@ -89,7 +89,7 @@ export default (props) => {
       req.then((data) => {
         setIdle(!idle)
       })
-    }, [])
+    }, [idle])
 
     const startIdle = () => {
       stingControlRepository.idleMove().then((data) => {
@@ -134,9 +134,9 @@ export default (props) => {
       }
 
       req.then((data) => {
-        _setIdleToggle(!axisIdleMove[0])
+        _setIdleToggle(!_idleToggle);
       })
-    })
+    }, [idleMoveUp, idleMoveRight])
 
     useEffect(() => {
       refresh((data) => setTargetPos(data.position))
@@ -198,7 +198,7 @@ export default (props) => {
               idleMoveUp ? "btn-danger" : "btn-success"
             )}
           >
-            Toggle Idle V <strong>{idleMoveRight ? "Off" : "On"}</strong>
+            Toggle Idle V <strong>{idleMoveUp ? "Off" : "On"}</strong>
           </a>
           <a
             id="camera_control_idle_h"

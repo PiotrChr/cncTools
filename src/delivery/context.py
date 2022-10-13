@@ -16,7 +16,8 @@ def create_context(current_page: str, cameras: list) -> dict:
         {"route": url_for('sec.recordings'), "name": "Recordings"},
         {"route": url_for('sec.window_openers'), "name": "Window Openers"},
         {"route": url_for('sec.relays'), "name": "Relays"},
-        {"route": url_for('sec.utils'), "name": "Utils"}
+        {"route": url_for('sec.utils'), "name": "Utils"},
+        {"route": url_for('sec.notifications'), "name": "Notifications"}
     ],
         'current_url': url_for(current_page),
         'cameras': cameras

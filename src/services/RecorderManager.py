@@ -1,5 +1,6 @@
 from os.path import isfile, join, exists
 from os import listdir, remove
+import threading
 import time
 
 
@@ -10,9 +11,10 @@ from src.delivery.http.utils import map_recorder
 
 class RecorderManager:
     recorders = []
-
+    read_lock: threading.Lock
+    
     def __init__(self):
-        pass
+        self.read_lock = threading.Lock()
 
     def record(self, camera: int) -> None:
         cam_config = get_cam_by_id(camera)
@@ -36,11 +38,15 @@ class RecorderManager:
         )
 
     def get_rec_status(self):
-        return (
+        self.read_lock.acquire()
+        rec_status = (
             dict((_recorder.camera, map_recorder(_recorder)) for _recorder in self.recorders),
             list(dict({"id": _cam['id'], "recordings": self.get_recordings_for_cam(
                 _cam['id'])}) for _cam in config['cameras'])
         )
+        self.read_lock.release()
+        
+        return rec_status
 
     def get_recordings_for_cam(self, camera: int):
         rec_path = config["recordings_dir"] + '/' + str(camera)
@@ -53,14 +59,17 @@ class RecorderManager:
         return None
 
     def get_full_status_for_cam(self, camera: int):
+        self.read_lock.acquire()
         rec_status = self.get_rec_status_for_cam(camera)
-        _recordings = self.get_recordings_for_cam(camera)
+        _recordings = {"id": camera, "recordings": self.get_recordings_for_cam(camera)}
 
         if not rec_status:
             rec_status = None
         else:
             rec_status = rec_status[camera]
 
+        self.read_lock.release()
+        
         return rec_status, _recordings
 
     def cleanup_recording(self, camera: int):
@@ -75,6 +84,7 @@ class RecorderManager:
         return None, None
 
     def start_record(self, camera: int):
+        self.read_lock.acquire()
         _, recorder = self.get_recorder_by_id(camera)
         if recorder:
             return False
@@ -82,9 +92,11 @@ class RecorderManager:
         self.record(camera)
 
         time.sleep(0.5)
+        self.read_lock.release()
         return True
 
     def stop_record(self, camera: int) -> bool:
+        self.read_lock.acquire()
         key, recorder = self.get_recorder_by_id(camera)
 
         if not recorder:
@@ -94,11 +106,15 @@ class RecorderManager:
         time.sleep(0.5)
 
         del self.recorders[key]
+        self.read_lock.release()
         
         return True
 
     def delete_record(self, camera: int, recording: str) -> None:
+        self.read_lock.acquire()
         rec_path = config["recordings_dir"] + '/' + str(camera) + '/' + recording
 
         if exists(rec_path) and isfile(rec_path):
             remove(rec_path)
+        
+        self.read_lock.release()
