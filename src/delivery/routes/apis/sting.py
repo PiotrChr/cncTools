@@ -37,6 +37,14 @@ def toggle_idle(motor: int, value: int):
     return {"data": {"status": DEFAULT_STING_STATUS_MSG}}
 
 
+@sting.route('/reset_c/', methods=["GET"])
+def reset_sting_controller():
+    url = config['apis']['sting'] + 'reset_dev/'
+    http.request('GET', url)
+
+    return {"data": {"status": "Sting - Ardunio was rebooted"}}, 200
+
+
 @sting.route('/idle_idle_on/', methods=["GET"])
 def auto_idle_on():
     robot_controller.auto_idle_on()

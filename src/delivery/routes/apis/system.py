@@ -6,7 +6,7 @@ import re
 
 from config import config
 
-http = urllib3.PoolManager()
+http = urllib3.PoolManager(timeout=urllib3.Timeout(connect=1, read=2))
 system = Blueprint('system', __name__)
 
 detector_status_pattern = re.compile(r'Active:.([a-z]*)', flags=re.MULTILINE)
