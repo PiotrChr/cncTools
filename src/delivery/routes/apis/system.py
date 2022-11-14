@@ -1,11 +1,15 @@
 from flask import Flask, Blueprint
 import urllib3
 import os
+import subprocess
+import re
 
 from config import config
 
 http = urllib3.PoolManager()
 system = Blueprint('system', __name__)
+
+detector_status_pattern = re.compile(r'Active:.([a-z]*)', flags=re.MULTILINE)
 
 
 @system.route('/sting/reboot/', methods=["GET"])
@@ -18,7 +22,11 @@ def reboot_sting():
 
 @system.route('/detector/restart/', methods=["GET"])
 def restart_detector():
-    res = os.system('sudo service detector restart')
+    res = subprocess.run(
+        ['sudo', 'systemctl', 'restart', 'detector.service'],
+        stdout=subprocess.PIPE
+    ).stdout.decode('utf-8')
+
     print(res)
 
     return {"status": "Detector was restarted"}, 200
@@ -26,7 +34,11 @@ def restart_detector():
 
 @system.route('/detector/stop/', methods=["GET"])
 def stop_detector():
-    res = os.system('sudo service detector stop')
+    res = subprocess.run(
+        ['sudo', 'systemctl', 'stop', 'detector.service'],
+        stdout=subprocess.PIPE
+    ).stdout.decode('utf-8')
+
     print(res)
 
     return {"status": "Detector was stopped"}, 200
@@ -34,7 +46,11 @@ def stop_detector():
 
 @system.route('/detector/start/', methods=["GET"])
 def start_detector():
-    res = os.system('sudo service detector start')
+    res = subprocess.run(
+        ['sudo', 'systemctl', 'start', 'detector.service'],
+        stdout=subprocess.PIPE
+    ).stdout.decode('utf-8')
+
     print(res)
 
     return {"status": "Detector was started"}, 200
@@ -42,7 +58,14 @@ def start_detector():
 
 @system.route('/detector/status/', methods=["GET"])
 def detector_status():
-    res = os.system('sudo service detector status')
-    print(res)
+    res = subprocess.run(
+        ['sudo', 'systemctl', 'status', 'detector.service'],
+        stdout=subprocess.PIPE
+    ).stdout.decode('utf-8')
 
-    return {"status": "Sting was rebooted"}, 200
+    status = detector_status_pattern.search(res)
+
+    if status is None:
+        return {"status": "Error reading status"}, 500
+
+    return {"data": {"status": status[1], "full_status": res}}, 200

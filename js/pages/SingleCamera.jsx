@@ -96,6 +96,7 @@ export default (props) => {
                 </div>
 
                 {camera.move && <CamControls camera={camera} />}
+                {camera.detector && <CamDetector camera={camera} />}
               </div>
             </div>
           </div>

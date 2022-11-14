@@ -27,6 +27,29 @@ config = {
             "api": "http://192.168.2.55:8082/api/",
             "rotate": 180,
             "type": "static",
+            "detector": {
+                "rov": 90,
+                "range": {
+                    "v": 40,
+                    "h": 180
+                },
+                "cam_position": {
+                    "loc": (455, 35),
+                    "def_pos_angle":
+                },
+                "room": {
+                    "area": (805, 440),
+                    "shape": [
+                        (0, 0),
+                        (0, 125),
+                        (125, 125),
+                        (125, 440),
+                        (805, 440),
+                        (805, 0),
+                        ()
+                    ]
+                },
+            },
             "move": {
                 "full": {
                     "h": "move/0/",

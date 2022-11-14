@@ -12,6 +12,7 @@ robot_controller = RobotController()
 
 DEFAULT_STING_STATUS_MSG = "Command sent"
 
+
 @sting.route('/status/', methods=["GET"])
 def sting_status():
     try:
@@ -20,6 +21,7 @@ def sting_status():
         return {"data": {"error": "Error reading robot position"}}
     
     return {"data": status}, 200
+
 
 @sting.route('/idle_move/', methods=["GET"])
 def idle_move():
