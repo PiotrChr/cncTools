@@ -104,7 +104,7 @@ export default (props) => {
     }
 
     const reset = () => {
-      stingControlRepository.reset().then((data) => {
+      stingControlRepository.reset_c().then((data) => {
         console.log(data);
       });
     }

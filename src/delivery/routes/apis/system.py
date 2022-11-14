@@ -4,7 +4,7 @@ import os
 
 from config import config
 
-http = urllib3.PoolManager()
+http = urllib3.PoolManager(timeout=urllib3.Timeout(connect=1, read=2))
 system = Blueprint('system', __name__)
 
 

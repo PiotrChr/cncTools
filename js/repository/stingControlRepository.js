@@ -19,6 +19,10 @@ export default class StingControlRepository extends AbstractApiRepository {
     return this.fetchJson(`${this.apiUrl}reset/`);
   }
 
+  async reset_c() {
+    return this.fetchJson(`${this.apiUrl}reset_c/`);
+  }
+
   async stop() {
     return this.fetchJson(`${this.apiUrl}stop/`);
   }
