@@ -28,25 +28,28 @@ config = {
             "rotate": 180,
             "type": "static",
             "detector": {
-                "rov": 90,
+                "cam": {
+                    "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections",
+                    "id": 6
+                },
+                "rov": 60,
                 "range": {
                     "v": 40,
                     "h": 180
                 },
                 "cam_position": {
                     "loc": (455, 35),
-                    "def_pos_angle":
+                    "def_pos_angle": 42
                 },
                 "room": {
                     "area": (805, 440),
                     "shape": [
                         (0, 0),
-                        (0, 125),
-                        (125, 125),
+                        (0, 315),
+                        (125, 315),
                         (125, 440),
                         (805, 440),
-                        (805, 0),
-                        ()
+                        (805, 0)
                     ]
                 },
             },

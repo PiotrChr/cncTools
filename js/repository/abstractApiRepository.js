@@ -5,6 +5,8 @@ import { stringifyParams } from '../utils';
 export class AbstractApiRepository {
   apiBaseUrl = config.apiBaseUrl;
 
+  timeout = 2
+
   getHeaders() {
     return {};
   }
@@ -18,7 +20,7 @@ export class AbstractApiRepository {
     const headers = this.getHeaders();
 
     try {
-      const response = await axios.get(this.getUrl(path, params), { headers });
+      const response = await axios.get(this.getUrl(path, params), { headers }, { timeout: this.timeout });
       return response.data;
     } catch (error) {
       this.handleError(error);

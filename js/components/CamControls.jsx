@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import StingControlRepository from '../repository/stingControlRepository'
 
@@ -17,7 +18,7 @@ const H_STEP = (H_MAX - H_MIN) / 30;
 
 const MOTORS = {'h': 0, 'v': 1}
 
-export default (props) => {
+const CamControls = (props) => {
     const camera = props.camera
     const [currentPos, setCurrentPos] = useState(DEFAULT_POS)
     const [targetPos, setTargetPos] = useState(DEFAULT_POS);
@@ -31,21 +32,25 @@ export default (props) => {
     let intervalId
 
     const refresh = (finish = null) => {
-      stingControlRepository.status()
-      .then(({data}) => {
-        data.position && setCurrentPos(data.position);
-        setIdle(data.idle)
-        setAutoIdle(data.autoIdle)
-        setIdleMoveRight(data.idleMoveRight)
-        setIdleMoveUp(data.idleMoveUp)
-        setIdleSpeed(data.idleSpeed)
+        stingControlRepository.status()
+        .then(({data}) => {
+            data.position && setCurrentPos(data.position);
+            setIdle(data.idle)
+            setAutoIdle(data.autoIdle)
+            setIdleMoveRight(data.idleMoveRight)
+            setIdleMoveUp(data.idleMoveUp)
+            setIdleSpeed(data.idleSpeed)
 
-        if (typeof finish == 'function') {
-          finish(data)
-        }
-      })
+            if (typeof props.refreshHandler == 'function') {
+                props.refreshHandler(data)
+            }
+
+            if (typeof finish == 'function') {
+              finish(data)
+            }
+        })
     }
-    
+
     // const track = () => {
     //   if (currentPos.v == targetPos.v && currentPos.h == targetPos.h) {
     //     console.log('nothing to do')
@@ -316,3 +321,9 @@ export default (props) => {
       </div>
     );
 }
+
+CamControls.propTypes = {
+    refreshHandler: PropTypes.func
+}
+
+export default CamControls;

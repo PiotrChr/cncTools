@@ -1,7 +1,8 @@
 import { AbstractApiRepository } from "./abstractApiRepository";
 
 export default class StingControlRepository extends AbstractApiRepository {
-  apiUrl = "sting/";
+  apiUrl = "sting/"
+  timeout = 1
 
   async idleMove() {
     return this.fetchJson(`${this.apiUrl}idle_move/`);

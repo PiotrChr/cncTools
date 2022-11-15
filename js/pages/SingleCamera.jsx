@@ -4,20 +4,28 @@ import Recordings from '../components/Recordings'
 import RecStatus from '../components/RecStatus'
 import CamControls from '../components/CamControls'
 import CamView from '../components/CamView'
+import CamDetector from '../components/CamDetector'
 import RecordingsRepository from '../repository/recordingsRepository'
+import StingControlRepository from '../repository/stingControlRepository'
 import { useCallback } from 'react'
 
 const recordingsRepository = new RecordingsRepository()
+const stingControlRepository = new StingControlRepository()
 
 export default (props) => {
     const [recordings, setRecordings] = useState(null)
     const [recStatus, setRecStatus] = useState(null)
+    const [currentPos, setCurrentPos] = useState({ v: 0, h: 0 })
     const context = useContext(GlobalContext)
     
     const { camera } = props
     const rotate = camera.rotate ?? 0
 
     let intervalId;
+
+    const refresh = (data) => {
+        data.position && setCurrentPos(data.position);
+    }
 
     useEffect(() => {
         fetchStatus()
@@ -95,12 +103,12 @@ export default (props) => {
                   )}
                 </div>
 
-                {camera.move && <CamControls camera={camera} />}
-                {camera.detector && <CamDetector camera={camera} />}
+                {camera.move && <CamControls camera={camera} refreshHandler={refresh} />}
               </div>
             </div>
           </div>
         </div>
+        {camera.detector && <CamDetector camera={camera} className='mt-5 mb-5' currentHAngle={ currentPos.h } />}
         {recStatus && <RecStatus {...recStatus} />}
         {recordings && (
           <Recordings

@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cls from 'classnames'
 
 const Recordings = (props) => {
     if (!props.recordings || props.recordings.length == 0) return null
 
     return (
-      <div className="row mt-5">
-        <div className="col-12">
+        <div className={ cls('col-12', props.className) }>
           <div className="card cam_card">
             <div className="card-body">
               <h5>Recordings</h5>
-
               <table className="table">
                 <thead>
                   <tr>
@@ -40,7 +39,6 @@ const Recordings = (props) => {
             </div>
           </div>
         </div>
-      </div>
     );
 }
 
@@ -52,7 +50,8 @@ Recordings.propTypes = {
   recordings: PropTypes.array,
   onRemove: PropTypes.func,
   onPlay: PropTypes.func,
-  cameraId: PropTypes.number
+  cameraId: PropTypes.number,
+  className: PropTypes.string
 }
 
 export default Recordings
