@@ -37,6 +37,7 @@
     flex-grow: 1;
     position: relative;
     background: #b6b6b6;
+    overflow: hidden;
 }
 
 .cam_card > .card-body {
@@ -46,11 +47,12 @@
 .detector_cam {
     height: 25px;
     width: 25px;
-    background-color: #bbb;
+    background-color: #ff6767;;
     border-radius: 50%;
     display: inline-block;
+    border: 5px solid #ffffff;
 }
-
+/*
 .detector_range {
     width: 0;
     height: 0;
@@ -60,4 +62,20 @@
     transform-origin: 0% 100%;
     transition-duration: 0.5s;
     transition-property: rotate;
+}
+*/
+
+.detector_range {
+    transform-origin: 0% 100%;
+    transition-duration: 0.5s;
+    transition-property: rotate;
+    opacity: 0.5;
+}
+
+.range_gradient_main-stop {
+    stop-color: #0099ff;
+}
+
+.range_gradient_alt-stop {
+    stop-color: #ffffff00;
 }

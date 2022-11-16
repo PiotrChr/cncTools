@@ -2,9 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const RoomSVG = (props) => {
-    const points = props.shape.reduce((acc, cur) => {
-        return acc + cur.join(',') + ' '
-    }, '')
+    const points = props.shape.reduce((acc, cur) => acc + cur.join(',') + ' ', '')
 
     return (
         <svg height={ props.height } width={ props.width }>

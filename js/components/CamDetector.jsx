@@ -55,13 +55,14 @@ const CamDetector = (props) => {
                                     defPosAngle={detector.cam_position.def_pos_angle}
                                 />
                             </div>
-                            <div className="d-flex" id="detector_capture">
+                            <div className="d-flex" id="detector_capture" style={{ width: '100%'}}>
                                 <CamView
                                     rotate={ detector.cam.rotate }
                                     source={ detector.cam.source }
                                     index={ detector.cam.id }
                                     dynamic={ false }
                                     id={ detector.cam.id }
+                                    style={{ marginLeft: '10px', height: detector.room.area[1]+"px" }}
                                 />
                             </div>
                         </div>

@@ -42,7 +42,7 @@ const CamView = (props) => {
     }, [fps]);
 
     return (
-      <div className="single_cam_view">
+      <div className="single_cam_view" style={{ ...{}, ...props.style}}>
         <img
           style={{
             transform: "rotate(" + rotate + "deg)",
@@ -85,13 +85,15 @@ CamView.propTypes = {
     rotate: PropTypes.number,
     index: PropTypes.number,
     dynamic: PropTypes.bool,
-    id: PropTypes.number
+    id: PropTypes.number,
+    style: PropTypes.object
 }
 
 CamView.defaultProps = {
     fps: 0,
     rotate: 0,
-    dynamic: false
+    dynamic: false,
+    style: {}
 }
 
 export default CamView
