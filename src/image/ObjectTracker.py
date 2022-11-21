@@ -7,7 +7,18 @@ import random
 
 
 class ObjectTracker:
-    def __init__(self, replace=None, daemon=False, scale_factor=1, on_recognition=None, on_track=None):
+    def __init__(
+            self,
+            replace=None,
+            daemon=False,
+            scale_factor=1,
+            on_recognition=None,
+            on_track=None,
+            labels_to_find=None
+    ):
+        if labels_to_find is None:
+            labels_to_find = ['person']
+
         self.CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
                         "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
                         "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
@@ -17,7 +28,7 @@ class ObjectTracker:
 
         self.net = cv2.dnn.readNetFromCaffe(self.prototxt, self.model)
         self.confidence = 0.5
-        self.labels_to_find = ['person']
+        self.labels_to_find = labels_to_find
         self.image_dim = None
         self.image_center = None
         self.tracker = None
@@ -89,7 +100,12 @@ class ObjectTracker:
                     self.current_cropped_frame = frame[max(0, startY): min(self.h, endY), max(0, startX): min(self.w, endX)]
 
                     if self.on_recognition is not None:
-                        self.on_recognition(self.current_cropped_frame, self.label, self.recognition_id)
+                        self.on_recognition(
+                            frame=self.current_cropped_frame,
+                            label=self.label,
+                            recognition_id=self.recognition_id,
+                            confidence=conf
+                        )
 
                     # construct a dlib rectangle object from the bounding
                     # box coordinates and then start the dlib correlation

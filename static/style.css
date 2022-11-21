@@ -52,6 +52,10 @@
     display: inline-block;
     border: 5px solid #ffffff;
 }
+
+.card-img-top {
+    object-fit: contain;
+}
 /*
 .detector_range {
     width: 0;
@@ -64,6 +68,11 @@
     transition-property: rotate;
 }
 */
+
+.detector_capture {
+    max-width: 400px;
+    min-width: 30%;
+}
 
 .detector_range {
     transform-origin: 0% 100%;

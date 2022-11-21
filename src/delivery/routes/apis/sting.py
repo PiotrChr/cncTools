@@ -1,7 +1,5 @@
 from flask import Flask, Blueprint
 import urllib3
-import json
-
 from config import config
 from src.robot_controller.RobotController import RobotController
 
@@ -92,4 +90,3 @@ def stop():
     robot_controller.stop()
     
     return {"data": {"status": DEFAULT_STING_STATUS_MSG}}
-        

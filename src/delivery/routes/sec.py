@@ -106,7 +106,7 @@ def notifications():
         pageTitle='Notifications',
         jsFile=url_for('static', filename='js/dist/notifications.js'),
         dashboard_data=json.dumps({
-            'context': create_context('sec.notifications', config['cameras'])
+            'context': create_context('sec.main', config['cameras'])
         }))
 
 

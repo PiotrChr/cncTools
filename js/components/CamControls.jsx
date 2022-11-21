@@ -1,11 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import StingControlRepository from '../repository/stingControlRepository'
+import {
+  selectAutoIdle,
+  selectIdle,
+  selectMoveRight,
+  selectMoveUp,
+  selectIdleSpeed,
+  selectStingCurrentHAngle,
+  selectStingCurrentVAngle,
+  fetchStingStatus,
+  toggleAxisIdle as toggleAxisIdleAction,
+  toggleAutoIdle as toggleAutoIdleAction,
+  stop as stopAction,
+  reset as resetAction,
+  toggleIdle as toggleIdleAction
+} from '../state/stingControl'
 
 const stingControlRepository = new StingControlRepository()
 
-const DEFAULT_POS = { v: 0, h: 0 }
+const DEFAULT_POS = { v: null, h: null }
 const TRACK_RATE = 1000
 
 const V_MAX = 115
@@ -14,53 +30,25 @@ const V_STEP = (V_MAX - V_MIN) / 10
 
 const H_MAX = 180
 const H_MIN = 0
-const H_STEP = (H_MAX - H_MIN) / 30;
+const H_STEP = Math.ceil((H_MAX - H_MIN) / 40);
 
 const MOTORS = {'h': 0, 'v': 1}
 
 const CamControls = (props) => {
     const camera = props.camera
-    const [currentPos, setCurrentPos] = useState(DEFAULT_POS)
-    const [targetPos, setTargetPos] = useState(DEFAULT_POS);
-    const [autoIdle, setAutoIdle] = useState(false)
-    const [idle, setIdle] = useState(false)
-    const [idleMoveRight, setIdleMoveRight] = useState(true)
-    const [idleMoveUp, setIdleMoveUp] = useState(true)
-    const [idleSpeed, setIdleSpeed] = useState(44)
-    
+    const dispatch = useDispatch()
+    const currentHAngle = useSelector(selectStingCurrentHAngle())
+    const currentVAngle = useSelector(selectStingCurrentVAngle())
+    const [targetPos, setTargetPos] = useState(DEFAULT_POS)
+    const autoIdle = useSelector(selectAutoIdle())
+    const idle = useSelector(selectIdle())
+    const idleMoveRight = useSelector(selectMoveRight())
+    const idleMoveUp = useSelector(selectMoveUp())
+    const idleSpeed = useSelector(selectIdleSpeed())
 
     let intervalId
 
-    const refresh = (finish = null) => {
-        stingControlRepository.status()
-        .then(({data}) => {
-            data.position && setCurrentPos(data.position);
-            setIdle(data.idle)
-            setAutoIdle(data.autoIdle)
-            setIdleMoveRight(data.idleMoveRight)
-            setIdleMoveUp(data.idleMoveUp)
-            setIdleSpeed(data.idleSpeed)
-
-            if (typeof props.refreshHandler == 'function') {
-                props.refreshHandler(data)
-            }
-
-            if (typeof finish == 'function') {
-              finish(data)
-            }
-        })
-    }
-
-    // const track = () => {
-    //   if (currentPos.v == targetPos.v && currentPos.h == targetPos.h) {
-    //     console.log('nothing to do')
-    //     return
-    //   }
-
-    //   refresh()
-    //   clearTimeout(timeoutId)
-    //   timeoutId = setTimeout(track, TRACK_RATE)
-    // }
+    const refresh = () => dispatch(fetchStingStatus())
 
     const updatePos = useCallback((axis, value) => {
       if (value == targetPos[axis]) return
@@ -74,79 +62,26 @@ const CamControls = (props) => {
         // track()
       })
       
-    }, [currentPos, targetPos])
+    }, [targetPos])
+
+    const toggleIdle = () => dispatch(toggleIdleAction())
+
+    const stop = () => dispatch(stopAction())
+
+    const reset = () => dispatch(resetAction())
     
-    const step = useCallback((motor, direction) => {
-      stingControlRepository.step(motor, direction)
-      .then((data) => {
-        console.log(data)
-      })
-    }, [])
+    const toggleAutoIdle = () => dispatch(toggleAutoIdleAction())
 
-    const toggleIdle = useCallback(() => {
-      let req
-      if (idle) {
-        req = stingControlRepository.stop()
-      } else {
-        req = stingControlRepository.idleMove()
-      }
-
-      req.then((data) => {
-        setIdle(!idle)
-      })
-    }, [idle])
-
-    const startIdle = () => {
-      stingControlRepository.idleMove().then((data) => {
-        console.log(data);
-      });
-    }
-
-    const stop = () => {
-      stingControlRepository.stop().then((data) => {
-        console.log(data)
-      })
-    }
-
-    const reset = () => {
-      stingControlRepository.reset_c().then((data) => {
-        console.log(data);
-      });
-    }
-    
-    const toggleAutoIdle = useCallback(() => {
-      let req
-
-      if (autoIdle) {
-        req = stingControlRepository.autoIdleOff()
-      } else {
-        req = stingControlRepository.autoIdleOn()
-      }
-
-      req.then((data) => {
-        setAutoIdle(!autoIdle)
-      })      
-    }, [autoIdle])
-
-    const toggleAxisIdle = useCallback((axis) => {
-      let req
-      const [_idleToggle, _setIdleToggle] = (axis == 'v') ? [idleMoveUp, setIdleMoveUp] : [idleMoveRight, setIdleMoveRight]
-
-      if (_idleToggle) {
-        req = stingControlRepository.toggleIdle(MOTORS[axis], 0)
-      } else {
-        req = stingControlRepository.toggleIdle(MOTORS[axis], 1)
-      }
-
-      req.then((data) => {
-        _setIdleToggle(!_idleToggle);
-      })
-    }, [idleMoveUp, idleMoveRight])
+    const toggleAxisIdle = (axis) => dispatch(toggleAxisIdleAction(axis))
 
     useEffect(() => {
-      refresh((data) => setTargetPos(data.position))
-      
-      intervalId = setInterval(refresh, 2000)
+      if (targetPos.v == null && currentVAngle !== null) {
+        setTargetPos({h: currentHAngle, v: currentVAngle})
+      }
+    }, [currentHAngle, currentVAngle])
+
+    useEffect(() => {
+      intervalId = setInterval(refresh, 1000)
 
       return () => {
         clearInterval(intervalId);
@@ -272,7 +207,7 @@ const CamControls = (props) => {
                 max={V_MAX}
                 step={V_STEP}
                 onChange={(e) => updatePos("v", e.target.value)}
-                value={targetPos.v}
+                value={targetPos.v || 0}
               />
             </div>
             <div className="form-group">
@@ -283,7 +218,7 @@ const CamControls = (props) => {
                 min={V_MIN}
                 max={V_MAX}
                 step={V_STEP}
-                value={currentPos.v}
+                value={currentVAngle || 0}
                 disabled
               />
             </div>
@@ -300,7 +235,7 @@ const CamControls = (props) => {
                 max={H_MAX}
                 step={H_STEP}
                 onChange={(e) => updatePos("h", e.target.value)}
-                value={targetPos.h}
+                value={targetPos.h || 0}
               />
             </div>
             <div className="form-group">
@@ -311,7 +246,7 @@ const CamControls = (props) => {
                 min={H_MIN}
                 max={H_MAX}
                 step={H_STEP}
-                value={currentPos.h}
+                value={currentHAngle || 0}
                 disabled
               />
             </div>

@@ -1,10 +1,16 @@
 from flask import Flask, Blueprint
-import urllib3
 import json
-
 from config import config
+from src.messaging.domains.main.consumer.StingNotificationsConsumer import StingNotificationsConsumer
+
+notifications = Blueprint('main', __name__)
+
+stingNotificationsConsumer = StingNotificationsConsumer()
+stingNotificationsConsumer.subscribe()
 
 
-http = urllib3.PoolManager()
+@notifications.route('/sting_detections/', methods=["GET"])
+def sting_detections():
+    messages = stingNotificationsConsumer.consume_all(num_messages=10)
 
-notifications = Blueprint('notifications', __name__)
+    return {"data": {"notifications": messages}}

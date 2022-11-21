@@ -6,6 +6,7 @@ http = urllib3.PoolManager()
 
 sting_cam_config = get_cam_by_id(1)
 
+
 class RobotController:
     FRAME_LOCK = 10
     H_RANGE = range(0, 1)

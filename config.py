@@ -24,7 +24,7 @@ config = {
             "name": "Sting",
             "kafka": True,
             "source": "http://192.168.2.53:8081/cam/video_feed/StingFrames/",
-            "api": "http://192.168.2.55:8082/api/",
+            "api": "http://192.168.2.83:8082/api/",
             "rotate": 180,
             "type": "static",
             "detector": {
@@ -168,11 +168,18 @@ config = {
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"
         },
+        "notifications_consumer_conf": {
+            "bootstrap.servers": "192.168.2.53:29092",
+            "group.id": uuid.uuid4(),
+            "enable.auto.commit": "False",
+            "auto.offset.reset": "largest"
+        },
         "conf": {
             "bootstrap.servers": "192.168.2.53:29092",
             "group.id": uuid.uuid4()
         },
         "topics": {
+            "Notifications"
             "StingFrames",
             "StingObjectDetections",
             "StingFaceDetections",
@@ -181,9 +188,10 @@ config = {
         
     },
     "apis": {
-        "sting": "http://192.168.2.55:8082/api/"
+        "sting": "http://192.168.2.83:8082/api/"
     }
 }
+
 
 def get_cam_by_id(_id: int):
     for camera in config['cameras']:
