@@ -1,5 +1,16 @@
 import os
 import uuid
+from dotenv import load_dotenv
+
+load_dotenv()
+
+mainVideoFeedHost = os.environ.get("MAIN_VIDEO_FEED_HOST")
+videoFeedPort = os.environ.get("VIDEO_FEED_PORT")
+mainVideoFeedPath = mainVideoFeedHost + ":" + videoFeedPort + "/cam/video_feed/"
+kafkaHost = os.environ.get("KAFKA_HOST")
+cncHost = os.environ.get("CNC_HOST")
+printerHost = os.environ.get("3D_PRINTER_HOST")
+stingHost = os.environ.get("STING_HOST")
 
 base_dirs = {
     "web_root": "/sec",
@@ -17,19 +28,19 @@ config = {
             "id": 0,
             "name": "6040 CNC",
             "type": "static",
-            "source": "http://192.168.2.53:8081/cam/video_feed/4",
+            "source": mainVideoFeedPath + "4",
         },
         {
             "id": 1,
             "name": "Sting",
             "kafka": True,
-            "source": "http://192.168.2.53:8081/cam/video_feed/StingFrames/",
+            "source": mainVideoFeedPath + "StingFrames/",
             "api": "http://192.168.2.83:8082/api/",
             "rotate": 180,
             "type": "static",
             "detector": {
                 "cam": {
-                    "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections",
+                    "source": mainVideoFeedPath + "StingObjectDetections",
                     "id": 6
                 },
                 "rov": 60,
@@ -78,26 +89,26 @@ config = {
             "id": 2,
             "name": "Workshop 1",
             "type": "static",
-            "source": "http://192.168.2.53:8081/cam/video_feed/0",
+            "source": mainVideoFeedPath + "0",
         },
         {
             "id": 3,
             "name": "Workshop 2",
             "type": "static",
-            "source": "http://192.168.2.53:8081/cam/video_feed/2",
+            "source": mainVideoFeedPath + "2",
         },
         {
             "id": 4,
             "name": "3D printer 1",
             "type": "dynamic",
-            "source": "http://192.168.2.43/webcam/?action=stream",
+            "source": printerHost + "webcam/?action=stream",
             "rotate": 180
         },
         {
             "id": 5,
             "name": "3D printer 2",
             "type": "dynamic",
-            "source": "http://192.168.2.43:8081/?action=stream",
+            "source": printerHost + "?action=stream",
         },
         # 6: {
         #     "id": 6,
@@ -110,7 +121,7 @@ config = {
             "name": "Sting Object Detections",
             "type": "static",
             "kafka": True,
-            "source": "http://192.168.2.53:8081/cam/video_feed/StingObjectDetections"
+            "source": mainVideoFeedPath + "StingObjectDetections"
 
         },
     ],
@@ -149,33 +160,33 @@ config = {
         }
     ],
     "kafka": {
-        "servers": "192.168.2.53:29092",
+        "servers": kafkaHost + ":29092",
         "face_detector_conf": {
-            "bootstrap.servers": "192.168.2.53:29092",
+            "bootstrap.servers": kafkaHost + ":29092",
             "group.id": uuid.uuid4(),
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"
         },
         "object_detector_conf": {
-            "bootstrap.servers": "192.168.2.53:29092",
+            "bootstrap.servers": kafkHost + ":29092",
             "group.id": uuid.uuid4(),
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"
         },
         "frame_consumer_conf": {
-            "bootstrap.servers": "192.168.2.53:29092",
+            "bootstrap.servers": kafkaHost+ ":29092",
             "group.id": uuid.uuid4(),
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"
         },
         "notifications_consumer_conf": {
-            "bootstrap.servers": "192.168.2.53:29092",
+            "bootstrap.servers": kafkaHost + ":29092",
             "group.id": uuid.uuid4(),
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"
         },
         "conf": {
-            "bootstrap.servers": "192.168.2.53:29092",
+            "bootstrap.servers": kafkaHost + ":29092",
             "group.id": uuid.uuid4()
         },
         "topics": {
@@ -188,7 +199,7 @@ config = {
         
     },
     "apis": {
-        "sting": "http://192.168.2.83:8082/api/"
+        "sting": stingHost + ":8082/api/"
     }
 }
 

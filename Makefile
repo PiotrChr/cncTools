@@ -1,4 +1,4 @@
-CNCIP := 192.168.2.53
+CNCIP := 192.168.1.121
 CNCUSER := pchrusciel
 CNCFOLDER := /home/pchrusciel/cncTools
 DLIB_VERSION := 19.24

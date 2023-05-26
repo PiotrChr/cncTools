@@ -1,4 +1,6 @@
+require('dotenv').config();
 const path = require('path')
+const webpack = require('webpack');
 
 module.exports = {
   mode: "development",
@@ -16,6 +18,13 @@ module.exports = {
     path: path.resolve(__dirname, 'static/js/dist'),
     filename: '[name].js'
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'CNC_HOST': JSON.stringify(process.env.CNC_HOST)
+      }
+    })
+  ],
   module: {
     rules: [
           {
