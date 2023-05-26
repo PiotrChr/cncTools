@@ -39,7 +39,7 @@ config = {
                 },
                 "cam_position": {
                     "loc": (455, 35),
-                    "def_pos_angle": 42
+                    "def_pos_angle": 98
                 },
                 "room": {
                     "area": (805, 440),

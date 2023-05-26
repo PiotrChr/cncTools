@@ -9,6 +9,10 @@ import SystemRepository from '../repository/systemRepository'
 
 const stingControlRepository = new StingControlRepository()
 const systemRepository = new SystemRepository()
+
+const MOTORS = {'h': 0, 'v': 1}
+
+
 // Selectors
 export const app = (state) => state
 
@@ -87,8 +91,7 @@ export const stopIdle = () => dispatch => {
     
 }
 
-export const toggleIdle = () => dispatch => {
-    const idle = useSelector(selectIdle())
+export const toggleIdle = (idle) => dispatch => {
     let req
 
     if (idle) {
@@ -123,11 +126,11 @@ export const toggleAutoIdle = () => dispatch => {
     })
 }
 
-export const toggleAxisIdle = (axis) => dispatch => {
-    const idle = useSelector(axis == 'v' ? selectMoveUp() : selectMoveRight())
+export const toggleAxisIdle = (axis, idle) => dispatch => {
+    // const idle = useSelector((axis == 'v' ? selectMoveUp : selectMoveRight)())
     const new_idle = idle ? 0 : 1
 
-    stingControlRepository.toggleIdle(axis, new_idle)
+    stingControlRepository.toggleIdle(MOTORS[axis], new_idle)
     .then(() => {
         dispatch({
             type: STING_CONTROL_SET_AXIS_IDLE,

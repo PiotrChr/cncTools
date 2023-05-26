@@ -80,7 +80,7 @@ start_uwsgi_cam:
 	uwsgi resources/uwsgi/uwsgi_cam.ini --enable-threads --logto log/cam.log
 
 start_uwsgi_sec:
-	uwsgi resources/uwsgi/uwsgi_sec.ini --logto log/sec.log
+	uwsgi resources/uwsgi/uwsgi_sec.ini --enable-threads --logto log/sec.log
 
 start_sting_control:
 	python3 stingControl.py

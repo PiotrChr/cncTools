@@ -43,6 +43,7 @@ class TrackerProcessor(Processor):
             self.last_recognition_id = recognition_id
 
             if frame is not None:
+                print('producing')
                 byte_image = cv2.imencode('.jpg', frame)[1].tostring()
                 self.HDProducer.produce(byte_image)
 
@@ -68,7 +69,7 @@ class TrackerProcessor(Processor):
             self.robot_controller.restart =  False
             self.tracker.tracker = None
 
-        # frame = cv2.rotate(frame, cv2.cv2.ROTATE_180)
+        frame = cv2.rotate(frame, cv2.cv2.ROTATE_180)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         if self.daemon:

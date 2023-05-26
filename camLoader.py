@@ -3,6 +3,7 @@ import time
 from flask import Flask, Blueprint, Response, jsonify, request, make_response, abort
 import threading
 import argparse
+from src.cam.Loader import Loader
 from src.cam.CamLoader import CamLoader
 from src.cam.KafkaLoader import KafkaLoader
 from config import config
@@ -24,13 +25,18 @@ def get_loader(camera_id):
 
 
 def generate_frames(camera_id):
-    _loader = get_loader(camera_id)
-    print("Camera: " + str(camera_id) + " is generating frames")
+    _loader: Loader = get_loader(camera_id)
     if _loader is None:
         raise Exception("No loader with id: " + str(camera_id) + " found")
+    
+    static = False
 
-    outputFrame = _loader.get_output_frame()
+    # if isinstance(_loader, CamLoader):
+    #     static = True
 
+    outputFrame = _loader.get_output_frame(False)
+
+    # print(outputFrame)
     if outputFrame is None:
         print("No output for camera: " + str(camera_id))
         abort(404)
@@ -47,10 +53,11 @@ def video_feed(camera_id):
     # Try converting to int if it's a number, otherwise carry on with str index
     try:
         camera_id = int(camera_id)
+        frame = generate_frames(camera_id)
     except:
         pass
 
-    response = make_response(generate_frames(camera_id))
+    response = make_response(frame)
     response.headers['Content-Type'] = 'image/png'
 
     return response
@@ -74,10 +81,11 @@ if __name__ in ['__main__', 'uwsgi_file_camLoader']:
                 try:
                     cam = int(cam)
                     loader = CamLoader(cam)
+                    loader.start_static()
                 except ValueError:
                     loader = KafkaLoader([cam], config["kafka"]["frame_consumer_conf"])
-
-                loader.start()
+                    loader.start()
+                
                 loaders.append(loader)
 
     if __name__ == "__main__":

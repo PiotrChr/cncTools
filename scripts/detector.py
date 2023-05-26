@@ -5,19 +5,18 @@ import src.image.utils as utils
 import threading
 import random
 
+IMGPATH = 'resources/images/person.jpg'
+
 
 class ObjectTracker:
     def __init__(
             self,
             replace=None,
             daemon=False,
-            scale_factor=1,
-            on_recognition=None,
-            on_track=None,
-            labels_to_find=None
+            scale_factor=1
     ):
-        if labels_to_find is None:
-            labels_to_find = ['person']
+        
+        self.labels_to_find = ['person']
 
         self.CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
                         "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
@@ -29,7 +28,6 @@ class ObjectTracker:
         self.net = cv2.dnn.readNetFromCaffe(self.prototxt, self.model)
         print('net', self.net)
         self.confidence = 0.5
-        self.labels_to_find = labels_to_find
         self.image_dim = None
         self.image_center = None
         self.tracker = None
@@ -45,8 +43,6 @@ class ObjectTracker:
         self.current_cropped_frame = None
         self.detection = None
         self.recognition_id = None
-        self.on_recognition = on_recognition
-        self.on_track = on_track
         self.w = None
         self.h = None
 
@@ -65,7 +61,7 @@ class ObjectTracker:
             self.image_dim, self.image_center = utils.get_frame_center(frame)
             self.w, self.h = self.image_dim
 
-        # rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         if self.tracker is None:
             # scaling = 0.007843
@@ -178,3 +174,8 @@ class ObjectTracker:
             self.tracker = None
 
         self.tracker_count = self.tracker_count + 1
+
+
+tracker = ObjectTracker()
+
+cv2.imread(IMGPATH)

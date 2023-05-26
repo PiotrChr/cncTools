@@ -63,8 +63,8 @@ const CamControls = (props) => {
       })
       
     }, [targetPos])
-
-    const toggleIdle = () => dispatch(toggleIdleAction())
+ 
+    const toggleIdle = useCallback(() => dispatch(toggleIdleAction(idle)), [idle])
 
     const stop = () => dispatch(stopAction())
 
@@ -72,7 +72,7 @@ const CamControls = (props) => {
     
     const toggleAutoIdle = () => dispatch(toggleAutoIdleAction())
 
-    const toggleAxisIdle = (axis) => dispatch(toggleAxisIdleAction(axis))
+    const toggleAxisIdle = (axis, currentValue) => dispatch(toggleAxisIdleAction(axis, currentValue))
 
     useEffect(() => {
       if (targetPos.v == null && currentVAngle !== null) {
@@ -132,7 +132,7 @@ const CamControls = (props) => {
           </a>
           <a
             id="camera_control_idle_v"
-            onClick={() => toggleAxisIdle("v")}
+            onClick={() => toggleAxisIdle("v", idleMoveUp)}
             className={classnames(
               "btn cnc_card-button mt-2",
               idleMoveUp ? "btn-danger" : "btn-success"
@@ -142,7 +142,7 @@ const CamControls = (props) => {
           </a>
           <a
             id="camera_control_idle_h"
-            onClick={() => toggleAxisIdle("h")}
+            onClick={() => toggleAxisIdle("h", idleMoveRight)}
             className={classnames(
               "btn cnc_card-button mt-2",
               idleMoveRight ? "btn-danger" : "btn-success"

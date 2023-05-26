@@ -62,6 +62,25 @@ class Loader:
 
         self.cleanup()
 
+    def read_static(self):
+        frame = self.get_frame()
+
+        if frame is not None:
+            for processor in self.processors:
+                process = processor.process(frame)
+                if process is None:
+                    continue
+
+                frame = process
+                processor_name = processor.__class__.__name__
+                if processor_name in self.actions:
+                    self.actions[processor_name](processor.yield_val)
+
+            # self.read_lock.acquire()
+            self.outputFrame = self.prepare_output_frame(frame)
+
+            
+
     def prepare_output_frame(self, frame):
         return frame
 
@@ -81,10 +100,18 @@ class Loader:
 
         return self
 
-    def get_output_frame(self):
-        self.read_lock.acquire()
-        frame = self.outputFrame
-        self.read_lock.release()
+    def start_static(self):
+        # TODO: make this work
+        self.start_read()
+
+    def get_output_frame(self, static=False):
+        if static:
+            self.read_static()
+            frame = self.outputFrame
+        else:
+            self.read_lock.acquire()
+            frame = self.outputFrame
+            self.read_lock.release()
 
         return frame
 

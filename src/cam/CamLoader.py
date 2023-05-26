@@ -36,7 +36,7 @@ class CamLoader(Loader):
                 self.vs.set(cv2.CAP_PROP_BUFFERSIZE, 2)
         except:
             print("Something happened ")
-
+        
         self.read()
 
     def prepare_output_frame(self, frame):

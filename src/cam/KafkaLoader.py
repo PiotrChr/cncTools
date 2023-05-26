@@ -6,7 +6,7 @@ import cv2
 class KafkaLoader(Loader):
     def __init__(self, topics, conf):
         self.FConsumer = FrameConsumer(topics, conf)
-        super().__init__(0.1, topics[0])
+        super().__init__(0.00, topics[0])
 
     def get_frame(self):
         return self.FConsumer.consume(False)
