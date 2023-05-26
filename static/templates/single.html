@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% set containerClass = "container" %}
+{% block title %}Camera view{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card cam_card">
+            <img class="card-img-top" src="{{ camera.source }}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title cnc_card-title">{{ camera.name }}</h5>
+                <div>
+                    <a href="/sec" class="btn btn-primary cnc_card-button float-right">Back</a>
+                    {% if rec_status %}
+                        <a href="{{ url_for('sec.sec_stop_record', camera=camera.id) }}" class="btn btn-danger cnc_card-button">Stop Recording</a>
+                    {% else %}
+                        <a href="{{ url_for('sec.sec_start_record', camera=camera.id) }}" class="btn btn-success cnc_card-button">Start Recording</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if rec_status %}
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card cam_card">
+            <div class="card-body">
+                <h4 class="mt-2">Recording status</h4>
+                <div>
+                    <p><span><strong>File name: </strong></span> {{ rec_status.recording_name }}</p>
+                    <p><span><strong>File path: </strong></span> {{ rec_status.name }}</p>
+                    <p><span><strong>Thread: </strong></span> {{ rec_status.thread_name }}</p>
+                    <p><span><strong>Started at: </strong></span> {{ rec_status.started }}</p>
+                    <p><span><strong>Width: </strong></span> {{ rec_status.width }}</p>
+                    <p><span><strong>Height: </strong></span> {{ rec_status.height }}</p>
+                    <p><span><strong>Fps: </strong></span> {{ rec_status.fps }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+{% if recordings %}
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card cam_card">
+            <div class="card-body">
+                <h4>Recordings</h4>
+                <table class="table">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for recording in recordings %}
+                        <tr>
+                            <td>
+                                {{ recording.web_path }}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('static', filename=recording.web_path }}" class="btn btn-success cnc_card-button">Play</a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('sec.sec_delete_record', camera=camera.id, recording=recording.file) }}" class="btn btn-danger cnc_card-button">Remove</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

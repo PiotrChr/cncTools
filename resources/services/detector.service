@@ -1,0 +1,14 @@
+[Unit]
+Description=Detector Service
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+User=pchrusciel
+WorkingDirectory=/home/pchrusciel/cncTools
+ExecStart=python3 stingControl.py
+
+[Install]
+WantedBy=multi-user.target

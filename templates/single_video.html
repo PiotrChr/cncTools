@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% set containerClass = "container" %}
+{% block title %}Camera recording{% endblock %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card cam_card">
+            <div class="card-body">
+                <h5 class="card-title cnc_card-title">{{ recording }}</h5>
+                <div>
+                    <video width="640" height="480" controls>
+                        <source src="{{ url_for('static', filename=web_path) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div>
+                    <a href="urlforsinglevideo" class="btn btn-success cnc_card-button">Back</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

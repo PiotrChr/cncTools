@@ -1,0 +1,11 @@
+# Include your customized HAL commands here
+# The commands in this file are run after the AXIS GUI (including PyVCP panel) starts
+
+# set up the rapid to home button
+net remote-rapid-to-home halui.mdi-command-01 <= pyvcp.rapid-to-home
+
+# set up the touch plate button
+net remote-laserzero halui.mdi-command-00 <= pyvcp.laserzero
+
+
+

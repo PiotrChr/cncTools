@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Relays{% endblock %}
+
+{% block content %}
+    {% for relay in relays %}
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="card cam_card">
+                <div class="card-body">
+                    <h5 class="card-title cnc_card-title">{{ relays[relay].alias }}</h5>
+                    {% if status[relay].power==0 %}
+                        <a href="" class="btn btn-danger cnc_card-button ml-2 disabled">Off</a>
+                        <a href="/sec/relays/on/{{ relays[relay].id }}" class="btn btn-success cnc_card-button">On</a>
+                    {% else %}
+                        <a href="/sec/relays/off/{{ relays[relay].id }}" class="btn btn-danger cnc_card-button ml-2">Off</a>
+                        <a href="" class="btn btn-success cnc_card-button disabled">On</a>
+                    {% endif %}
+
+                    <span class="cnc_card-relay_status"><small><strong>Currently</strong>:
+                        {% if status[relay].power==0 %} off {% else %} on {% endif %}
+                    </small></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

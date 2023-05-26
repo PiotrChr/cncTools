@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block containerClass %}containerFluid{% endblock %}
+{% block title %}Overseer eye{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% for camera in cameras %}
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">
+        <div class="card cam_card">
+            <img class="card-img-top" src="{{ cameras[camera].source }}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title cnc_card-title">{{ cameras[camera].name }}</h5>
+                <a href="{{ url_for('sec.single', r=camera) }}" class="btn btn-primary cnc_card-button">Inspect</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

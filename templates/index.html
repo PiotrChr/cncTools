@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block scriptsend %}
+    <script>
+        window.dashboardData = {{ dashboard_data|safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/dist/index.js') }}"></script>
+{% endblock %}
+
+{% block containerClass %}containerFluid{% endblock %}
+{% block title %}Overseer eye{% endblock %}
+
+{% block content %}
+<!--<div class="row">-->
+<!--    {% for camera in cameras %}-->
+<!--    {% set rotate = cameras[camera].rotate if cameras[camera].rotate else 0 -%}-->
+<!--    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 label">-->
+<!--        <div class="card cam_card">-->
+<!--            <img style="transform:rotate({{ rotate }}deg)" class="card-img-top" src="{{ cameras[camera].source }}" alt="Card image cap">-->
+<!--            {% if cameras[camera].move %}-->
+<!--                <div style="position: absolute; right: 20px; color: white; font-size: 40px;">-->
+<!--                    <i class="fa fa-gamepad"></i>-->
+<!--                </div>-->
+<!--            {% endif %}-->
+<!--            <div class="card-body d-flex flex-column">-->
+<!--                <div>-->
+<!--                    <h5 class="card-title cnc_card-title">{{ cameras[camera].name }}</h5>-->
+<!--                </div>-->
+<!--                <div class="d-flex flex-row justify-content-between align-items-center">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="fps_{{camera}}" class="form-label">Refresh rate [FPS]</label>-->
+<!--                        <select class="form-select" aria-label="Refresh rate [FPS]" id="fps_{{camera}}">-->
+<!--                            <option selected>1</option>-->
+<!--                            <option value="1">2</option>-->
+<!--                            <option value="2">5</option>-->
+<!--                            <option value="3">10</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+
+<!--                    <a href="{{ url_for('sec.single', r=camera) }}" class="btn btn-primary cnc_card-button">Inspect</a>-->
+<!--                </div>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    {% endfor %}-->
+<!--</div>-->
+<div id="root"></div>
+{% endblock %}
