@@ -34,8 +34,8 @@ config = {
             "id": 1,
             "name": "Sting",
             "kafka": True,
-            "source": mainVideoFeedPath + "StingFrames/",
-            "api": "http://192.168.2.83:8082/api/",
+            "source": mainVideoFeedPath + "StingFrames",
+            "api": stingHost + ":8082/api/",
             "rotate": 180,
             "type": "static",
             "detector": {
@@ -168,7 +168,7 @@ config = {
             "auto.offset.reset": "largest"
         },
         "object_detector_conf": {
-            "bootstrap.servers": kafkHost + ":29092",
+            "bootstrap.servers": kafkaHost + ":29092",
             "group.id": uuid.uuid4(),
             "enable.auto.commit": "False",
             "auto.offset.reset": "largest"

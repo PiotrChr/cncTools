@@ -18,7 +18,7 @@ main = Blueprint('main', __name__)
 
 def get_loader(camera_id):
     for _loader in loaders:
-        if _loader.camera_id == camera_id:
+        if str(_loader.camera_id) == camera_id:
             return _loader
 
     return None
@@ -26,6 +26,7 @@ def get_loader(camera_id):
 
 def generate_frames(camera_id):
     _loader: Loader = get_loader(camera_id)
+    _loader.is_reading = True
     if _loader is None:
         raise Exception("No loader with id: " + str(camera_id) + " found")
     
@@ -36,11 +37,12 @@ def generate_frames(camera_id):
 
     outputFrame = _loader.get_output_frame(False)
 
+    _loader.is_reading = False
+
     # print(outputFrame)
     if outputFrame is None:
-        print("No output for camera: " + str(camera_id))
-        abort(404)
-
+        raise Exception("No output for camera: " + str(camera_id))
+        
     return outputFrame
 
 
@@ -52,10 +54,10 @@ def video_feed(camera_id):
 
     # Try converting to int if it's a number, otherwise carry on with str index
     try:
-        camera_id = int(camera_id)
         frame = generate_frames(camera_id)
-    except:
-        pass
+    except Exception as e:
+        print(e)
+        abort(404)
 
     response = make_response(frame)
     response.headers['Content-Type'] = 'image/png'
@@ -81,11 +83,11 @@ if __name__ in ['__main__', 'uwsgi_file_camLoader']:
                 try:
                     cam = int(cam)
                     loader = CamLoader(cam)
-                    loader.start_static()
                 except ValueError:
                     loader = KafkaLoader([cam], config["kafka"]["frame_consumer_conf"])
-                    loader.start()
+                    
                 
+                loader.start()
                 loaders.append(loader)
 
     if __name__ == "__main__":

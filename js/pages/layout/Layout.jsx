@@ -7,7 +7,7 @@ const Layout = (props) => (
     <div className="c-app c-default-layout">
       <div className="c-wrapper">
         <Header />
-        <div className="container-fluid">
+        <div className="container">
             { props.children }
         </div>
       <Footer />

@@ -12,6 +12,7 @@ class Loader:
     outputFrame = None
     refresh_rate: int
     is_running: bool
+    is_reading: bool
     camera_id: int
     read_lock: threading.Lock
 
@@ -23,6 +24,7 @@ class Loader:
         self.refresh_rate = refresh_rate
         self.t: threading.Thread
         self.is_running = False
+        self.is_reading = False
         self.camera_id = camera_id
         self.read_lock = threading.Lock()
 
@@ -38,8 +40,12 @@ class Loader:
 
     def read(self):
         while self.is_running:
-            frame = self.get_frame()
+            # if self.is_reading is False:
+            #     time.sleep(0.2)
+            #     continue
 
+            frame = self.get_frame()
+            
             if frame is not None:
                 for processor in self.processors:
                     process = processor.process(frame)
@@ -58,8 +64,9 @@ class Loader:
             else:
                 pass
                 # print('no frame')
-            time.sleep(self.refresh_rate)
 
+            time.sleep(self.refresh_rate)
+            
         self.cleanup()
 
     def read_static(self):

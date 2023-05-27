@@ -42,11 +42,11 @@ prepare_dlib_python:
 	&& python3 setup.py install
 
 prepare_resources:
-	sudo cp resources/nginx/cam.conf /etc/nginx/sites-available \
-	sudo cp resources/nginx/sec.conf /etc/nginx/sites-available \
-    && sudo ln -s /etc/nginx/sites-available/cam.conf /etc/nginx/sites-enabled \
-    && sudo ln -s /etc/nginx/sites-available/sec.conf /etc/nginx/sites-enabled \
-    && sudo service nginx restart
+	sudo cp resources/nginx/cam.conf /etc/nginx/sites-available/ \
+	&& sudo cp resources/nginx/sec.conf /etc/nginx/sites-available/ \
+	&& sudo ln -sf /etc/nginx/sites-available/cam.conf /etc/nginx/sites-enabled/cam.conf \
+	&& sudo ln -sf /etc/nginx/sites-available/sec.conf /etc/nginx/sites-enabled/sec.conf \
+	&& sudo service nginx restart
 
 prepare_python:
 	sudo apt install -y python3.7-dev python3-distutils uwsgi uwsgi-src uuid-dev libcap-dev libpcre3-dev libpython3.7-dev libpython3-all-dev uwsgi-plugin-python3 \
@@ -60,12 +60,15 @@ install_python_deps:
 install_js_deps:
 	yarn install
 
-install_services:
-	sudo cp resources/services/* /etc/systemd/system/ \
+copy_services:
+	sudo cp resources/services/* /etc/systemd/system/
+
+install_services: copy_services
+	&& sudo ufw allow 1935/tcp \
 	&& sudo systemctl daemon-reload \
-    && sudo service cam enable \
-    && sudo service sec enable \
-    && sudo service vnc enable
+    && sudo systemctl enable cam \
+    && sudo systemctl enable sec \
+    && sudo systemctl enable vnc
 
 test_cam:
 	python3 scripts/testcam.py
@@ -74,7 +77,7 @@ start_stream:
 	python3 app.py
 
 sync_cnc:
-	rsync -av --exclude={'venv','.idea','__pycache__','node_modules','build'} ./ ${CNCUSER}@${CNCIP}:${CNCFOLDER}
+	rsync -av --exclude='venv' --exclude='.idea' --exclude='__pycache__' --exclude='node_modules' --exclude='build' ./ ${CNCUSER}@${CNCIP}:${CNCFOLDER}
 
 start_uwsgi_cam:
 	uwsgi resources/uwsgi/uwsgi_cam.ini --enable-threads --logto log/cam.log

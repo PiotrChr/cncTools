@@ -1,6 +1,6 @@
 import time
 import cv2
-from imutils.video import VideoStream
+
 from src.cam.Loader import Loader
 
 
@@ -13,23 +13,22 @@ class CamLoader(Loader):
         self.by_url = by_url
         self.frame = None
 
-        super().__init__(refresh_rate=0.05, camera_id=camera_id)
+        super().__init__(refresh_rate=0.1, camera_id=camera_id)
 
     def get_frame(self):
-        if self.by_url:
-            _, frame = self.vs.read()
+        _, frame = self.vs.read()
 
-            return frame
-        else:
-            return self.vs.read()
+        # self.vs.update()
+        return frame
 
     def start_read(self):
         print("Starting thread for camera id:" + str(self.camera_id))
 
         try:
             if not self.by_url:
-                self.vs = VideoStream(src=self.camera_id).start()
-                time.sleep(2)
+                self.vs = cv2.VideoCapture(self.camera_id)
+                self.vs.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+                time.sleep(1)
                 print("Stream for:" + str(self.camera_id) + " started, writing to buffer")
             else:
                 self.vs = cv2.VideoCapture(self.camera_id)
